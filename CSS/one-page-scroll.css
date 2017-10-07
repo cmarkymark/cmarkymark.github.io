@@ -1,3 +1,50 @@
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+}
+.wrapper {
+  height: 100% !important;
+  height: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.italic {
+  font-style: italic;
+}
+.main {
+  float: left;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+}
+section {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.section-gray {
+  background: #eeeeee;
+}
+@media (max-width: 991px) {
+  .section-gray {
+    background: #eeeeee;
+  }
+}
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: #000;
+  z-index: 2;
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+}
+
 body, html {
   margin: 0;
   overflow: hidden;
