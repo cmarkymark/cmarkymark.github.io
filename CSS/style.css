@@ -1,6 +1,19 @@
 .main-wrapper {
   padding-top :70px;
   height: 100vh;  
+  display: table;
+  position: absolute;
+}
+
+.middle {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.inner {
+    margin-left: auto;
+    margin-right: auto; 
+    width: 75%;
 }
 
 #page1 {
