@@ -16,6 +16,25 @@
     text-align: center;
 }
 
+/*
+* https://gist.github.com/nurbek-ab/92989fe6c5071e956b6a
+*/
+
+.btn-transparent {
+    background: transparent;
+    color: #F2F2F2;
+    -webkit-transition: background .2s ease-in-out, border .2s ease-in-out;
+    -moz-transition: background .2s ease-in-out, border .2s ease-in-out;
+    -o-transition: background .2s ease-in-out, border .2s ease-in-out;
+    transition: background .2s ease-in-out, border .2s ease-in-out;
+    border: 2px solid #4992B7;
+}
+
+    .btn-transparent:hover {
+        color: white;
+        background-color: rgba(255,255,255,0.2);
+    }
+
 #page1 {
  background-image: url("divebar.jpg"); 
 }
