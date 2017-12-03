@@ -4,8 +4,9 @@
 }
 
 .middle {
-    display: table-cell;
-    vertical-align: middle;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .inner {
