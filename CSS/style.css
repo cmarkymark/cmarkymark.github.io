@@ -22,17 +22,17 @@
 
 .btn-transparent {
     background: transparent;
-    color: #F2F2F2;
+    color: #FFFFFF;
     -webkit-transition: background .2s ease-in-out, border .2s ease-in-out;
     -moz-transition: background .2s ease-in-out, border .2s ease-in-out;
     -o-transition: background .2s ease-in-out, border .2s ease-in-out;
     transition: background .2s ease-in-out, border .2s ease-in-out;
-    border: 2px solid #4992B7;
+    border: 2px solid #FFFFFF;
 }
 
     .btn-transparent:hover {
-        color: white;
-        background-color: rgba(255,255,255,0.2);
+        color: black;
+        background-color: rgba(255,255,255,0.5);
     }
 
 #page1 {
