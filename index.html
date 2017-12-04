@@ -23,6 +23,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>
     $(function() {
+      $('#myCarousel').carousel();
+      
       $('a[href*=#]:not([href=#])').click(function() {
         if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
           var target = $(this.hash);
@@ -38,15 +40,7 @@
     });
     </script>
     <!-- End of SMOOTH SCROLL -->
-    <script>
-      // Load this when the DOM is ready
-      $(function(){
-        // You used .myCarousel here. 
-        // That's the class selector not the id selector,
-        // which is #myCarousel
-        $('#myCarousel').carousel();
-      });
-     </script>
+
 
   </head>
   
