@@ -43,3 +43,7 @@
   background: rgba(0,0,0,0.5);
 }
 
+.orange-background {
+  background: rgb(250,105,0);
+  color: white;
+}
