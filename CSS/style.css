@@ -47,3 +47,7 @@
   background: rgb(250,105,0);
   color: white;
 }
+
+.glyph-size {
+   font-size: 8.5vw; 
+}
