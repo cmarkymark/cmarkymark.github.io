@@ -53,6 +53,11 @@
   color: white;
 }
 
+gold-background {
+ background: rgb(242,188,39);
+ color: white;
+}
+
 .glyph-size {
    font-size: 8.5vw; 
 }
