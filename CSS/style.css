@@ -44,18 +44,16 @@
 }
 
 .orange-background {
-  background: rgb(250,105,0);
-  color: white;
+  background: rgba(250,105,0,.5);
 }
 
 .blue-background {
-  background: rgb(85,185,200);
-  color: white;
+  background: rgba(85,185,200,.5);
 }
 
-gold-background {
- background: rgb(242,188,39);
- color: white;
+.gold-background {
+ background: rgba(242,188,39,.5);
+
 }
 
 .glyph-size {
