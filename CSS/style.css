@@ -48,6 +48,11 @@
   color: white;
 }
 
+.blue-background {
+  background: rgb(85,185,200);
+  color: white;
+}
+
 .glyph-size {
    font-size: 8.5vw; 
 }
