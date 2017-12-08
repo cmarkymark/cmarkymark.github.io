@@ -20,6 +20,9 @@
      <!-- onepage scroll stylesheet-->
     <link rel="stylesheet" href="CSS/style.css">
     
+    <script src="CSS/LDA/d3.v3.js"></script>
+    <script src="CSS/LDA/ldavis.js"></script>
+    
    <!-- SMOOTH SCROLL -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>
@@ -317,6 +320,15 @@
       </div>
     </div>
     <div id="page7" class="main-wrapper">
+      <div class="middle">
+        <div id = "lda"></div>
+          <script>
+            var vis = new LDAvis("#lda", "CSS/LDA/lda.json");
+          </script>
+      </div>
+      </div>
+    </div>
+    <div id="page8" class="main-wrapper">
      
       <div class="container middle">
         <div class = "row inner">
