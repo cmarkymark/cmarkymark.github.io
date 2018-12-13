@@ -1,0 +1,391 @@
+---
+title: "K-Cross Validation Artificial NN"
+author: "Charles Marks"
+date: "December 8, 2018"
+output: html_document
+---
+
+Got most of this stuff from https://www.analyticsvidhya.com/blog/2017/09/creating-visualizing-neural-network-in-r/
+
+```{r global options}
+library(tidyverse)
+library(tableone)
+library(PerformanceAnalytics)
+library(psych)
+library(ROCR)
+library(randomForest)
+library(neuralnet)
+options(digits = 2)
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+## Analytic Plan
+
+We shall conduct a series of multivariate logisitic regression in order to determine factors related to needing glaucoma surgery.  First, we shall split our variables up into 3 categories : 1) vital statistics and hosptalizations, 2) diagnoses, and 3) prescribed medications.  We shall conduct a multivariate regression for each of these variable categories, and finally run a final model combining variables.
+
+## Uploading and Cleaning the Final Dataset
+
+### Loading the Data
+
+```{r dataset}
+
+#df <- read.csv("Dec8_Dataset.csv", header=TRUE)
+
+```
+
+### Exclusion Criteria
+
+So, now we need to exclude people based on certain factors.  There are two primary exclusion criteria, the first being that patients must have been in care in the UC system prior to their surgery (ie we dont want people who just came to UC for surgery, as they will skew the results towards non-significance)
+
+```{r pressure, echo=FALSE}
+
+#clean_data <- data.frame(matrix(nrow=0,ncol=ncol(df)))
+#colnames(clean_data) <- colnames(df)
+
+#surgery_exclude_data <- data.frame(matrix(nrow=0,ncol=ncol(df)))
+#colnames(surgery_exclude_data) <- colnames(df)
+
+#newpatient_exclude_data <- data.frame(matrix(nrow=0,ncol=ncol(df)))
+#colnames(newpatient_exclude_data) <- colnames(df)
+
+#no_vital_data_exclude_data <- data.frame(matrix(nrow=0,ncol=ncol(df)))
+#colnames(no_vital_data_exclude_data) <- colnames(df)
+
+#for(patient_num in 1:nrow(df))
+#{ 
+#  if(!is.na(df$first_surgery_date[patient_num]) && !is.na(df$first_vitals_contact_date[patient_num]))
+#  {
+#    time_test <- difftime(df$first_surgery_date[patient_num], df$first_vitals_contact_date[patient_num], units = "days")
+#    if(time_test > 180)
+#    {
+      
+#      clean_data <- rbind(clean_data, df[patient_num,])
+#    } else {surgery_exclude_data <- rbind(surgery_exclude_data, df[patient_num,])}
+#  } 
+#  else if(is.na(df$first_surgery_date[patient_num]) && !is.na(df$first_vitals_contact_date[patient_num]))
+#  {
+#    time_test2 <- difftime(as.Date("11/01/2018","%m/%d/%Y"), df$first_vitals_contact_date[patient_num], units = "days")
+#    if(time_test2 > 180)
+#    {
+#     clean_data <- rbind(clean_data, df[patient_num,])
+#    } else {
+#      newpatient_exclude_data <- rbind(newpatient_exclude_data, df[patient_num,])
+#    }
+#  } else
+#  {
+#    no_vital_data_exclude_data <- rbind(no_vital_data_exclude_data, df[patient_num,])
+#  }
+#}
+
+
+
+```
+
+### After Exlcusions
+
+We need to decide if we want the exclusion to be 1 year or 6 months
+
+### Imputing Missing Data
+
+```{r impute}
+
+
+## systolic_sd 30 NA
+
+#clean_data$systolic_sd[is.na(clean_data$systolic_sd)] <- mean(clean_data$systolic_sd, na.rm = TRUE)
+
+## diastolic_sd 30 NA
+
+#clean_data$diastolic_sd[is.na(clean_data$diastolic_sd)] <- mean(clean_data$diastolic_sd, na.rm = TRUE)
+
+## BMI mean 4 NA
+
+#clean_data$BMI_mean[is.na(clean_data$BMI_mean)] <- median(clean_data$BMI_mean, na.rm = TRUE)
+# attempts at imputing messed up analyses for some reason
+
+## BMI max 3 NA (median)
+#clean_data$BMI_max[is.na(clean_data$BMI_max)] <- median(clean_data$BMI_max, na.rm = TRUE)
+
+## BMImin 3 NA (median)
+#clean_data$BMI_min[is.na(clean_data$BMI_min)] <- median(clean_data$BMI_min, na.rm = TRUE)
+
+## alcohol use (12 NAs)
+## we will not imput given categorical nature, unclear how this will skew the results
+## if it is not significant in initial analyses we will simply exclude from final analyses 
+
+## smoking status (1 NA)
+```
+
+## Table One
+
+Here is the descriptive statistics, stratified by history of glaucoma surgery.  Rows from this can be taken to present a final descriptive table, if so desired.  Descriptive table might not be overly meaningful tho...
+
+```{r tableone}
+
+
+
+tone_vars = colnames(clean_data)
+tone_vars[12] <- NA
+tone_vars[28] <- NA
+
+tone <- tableone::CreateTableOne(vars = tone_vars, strata = c("any_glaucoma_surgey") ,data =  clean_data)
+
+```
+```{r Bivariate, warning=FALSE}
+bi.final <- data.frame(matrix(nrow = 0, ncol = 3))
+for(i in 3:ncol(clean_data))
+{
+if(i == 11 || i == 12 || i == 22 || i == 23 || i == 24 || i == 25 || i == 26 ||i == 28 || i == 135 || i == 130 || i == 123 || i == 109 || i == 104 || i == 92 || i == 84 ||  i == 78 || i == 54 || i == 53){}
+  else{
+iv <- colnames(clean_data)[i] 
+bi.model <- glm (any_glaucoma_surgey ~ get(iv), data = clean_data, family = binomial(link="logit"))
+#summary(age)
+bi.results <- exp(cbind(OR = coef(bi.model), confint(bi.model)))
+rownames(bi.results)[2] <- colnames(clean_data)[i]
+bi.final <- rbind(bi.final, bi.results)
+}
+}
+
+
+
+bi.signif <- bi.final[which(bi.final$`2.5 %` > 1 | bi.final$`97.5 %`<1),]
+```
+
+
+## Creating the five groups for cross-validation
+
+
+## Defining Our Five Groups
+
+```{r define groups}
+
+#first scale the data
+numeric_data <- clean_data
+
+for(i in 1:ncol(numeric_data))
+{
+  if(!is.numeric(numeric_data[,i]))
+  {
+    numeric_data[,i] <- as.numeric(numeric_data[,i])
+  }
+  
+  
+}
+#numeric_data <- numeric_data[,-7]
+max <- apply(numeric_data,2,max)
+min <- apply(numeric_data,2,min)
+numeric_data <- as.data.frame(scale(numeric_data, center = min, scale = max - min))
+
+#numeric_data$any_glaucoma_surgey <- clean_data$any_glaucoma_surgey
+values <- rep(1:5, length.out=391)
+random <- sample(values)
+numeric_data$cv_group <- numbers
+
+
+train.one <- numeric_data[which(numeric_data$cv_group!= 1),]
+test.one <- numeric_data[which(numeric_data$cv_group== 1),]
+
+train.two <- numeric_data[which(numeric_data$cv_group!= 2),]
+test.two <- numeric_data[which(numeric_data$cv_group== 2),]
+
+train.three <- numeric_data[which(numeric_data$cv_group!= 3),]
+test.three <- numeric_data[which(numeric_data$cv_group== 3),]
+
+train.four <- numeric_data[which(numeric_data$cv_group!= 4),]
+test.four <- numeric_data[which(numeric_data$cv_group== 4),]
+
+train.five <- numeric_data[which(numeric_data$cv_group!= 5),]
+test.five <- numeric_data[which(numeric_data$cv_group== 5),]
+
+```
+
+## Running Cross Val
+
+### Test 1
+
+```{r test 1, include=FALSE}
+
+set.seed(2)
+
+model.ann.one <- neuralnet(any_glaucoma_surgey ~ Age + Gender +systolic_max + systolic_min + systolic_mean  + diastolic_max + diastolic_min + diastolic_mean +pulse_min + pulse_max + pulse_mean  +ever_hospitalized + days_hospitalized + CHF + PVD + Stroke + Dementia + Pulmonary + LiverMild + DM + DMcx  + Renal + Cancer + Mets + med_class.Analgesics_._non.opioids + med_class.Analgesics_._opioids  +  med_class.Anti.rheumatic +  med_class.Antianxiety_agents  + med_class.Antiasthmatic + med_class.Anticoagulants+med_class.Anticonvulsant+med_class.Antidepressants+med_class.Antidiabetic+med_class.Antiemetics+med_class.Antihyperlipidemic+med_class.Antihypertensive+med_class.Beta_blockers+med_class.Calcium_blockers+med_class.Corticosteroids+med_class.Cough.Cold+med_class.Decongestants+med_class.Dermatological+med_class.Diuretics+med_class.Laxatives+med_class.Macrolide_antibiotics+med_class.Misc._antiinfectives+med_class.Ophthalmic+med_class.Ulcer_drugs, 
+                 data=train.one, hidden = 2
+                 )
+
+#test.one.cv <- test.one[,c(3,4,13,14,15,17,18,19,30,31,32,36,37,38,39,40,43,44,45,47,48,50,52,53,55,56,61,63,65,66,67,68,69,72,75,76,87,88,94,95,96,97,101,108,110,115,126,136)]
+test.one.cv <- test.one[,c(4,5,14,15,16,18,19,20,31,32,33,37,38,39,40,41,44,45,46,48,49,51,53,54,56,57,62,64,66,67,68,69,70,73,76,77,88,89,95,96,97,98,102,109,111,116,127,137)]
+prob.one <- compute(model.ann.one,test.one.cv)
+prob.one.results <- prob.one$net.result
+
+pred.one <- ROCR::prediction(prob.one.results,test.one$any_glaucoma_surgey)
+perf.one <- ROCR::performance(pred.one,"tpr","fpr")
+plot(perf.one)
+
+nn.one.auc <- performance(pred.one,"auc")@y.values[[1]]
+```
+
+### Test 2
+
+```{r test 2, include=FALSE}
+set.seed(2)
+
+model.ann.two <- neuralnet(any_glaucoma_surgey ~ Age + Gender +systolic_max + systolic_min + systolic_mean  + diastolic_max + diastolic_min + diastolic_mean +pulse_min + pulse_max + pulse_mean  +ever_hospitalized + days_hospitalized + CHF + PVD + Stroke + Dementia + Pulmonary + LiverMild + DM + DMcx  + Renal + Cancer + Mets + med_class.Analgesics_._non.opioids + med_class.Analgesics_._opioids  +  med_class.Anti.rheumatic +  med_class.Antianxiety_agents  + med_class.Antiasthmatic + med_class.Anticoagulants+med_class.Anticonvulsant+med_class.Antidepressants+med_class.Antidiabetic+med_class.Antiemetics+med_class.Antihyperlipidemic+med_class.Antihypertensive+med_class.Beta_blockers+med_class.Calcium_blockers+med_class.Corticosteroids+med_class.Cough.Cold+med_class.Decongestants+med_class.Dermatological+med_class.Diuretics+med_class.Laxatives+med_class.Macrolide_antibiotics+med_class.Misc._antiinfectives+med_class.Ophthalmic+med_class.Ulcer_drugs, 
+                 data=train.two, hidden = 2
+                 )
+
+#test.two.cv <- test.two[,c(3,4,13,14,15,17,18,19,30,31,32,36,37,38,39,40,43,44,45,47,48,50,52,53,55,56,61,63,65,66,67,68,69,72,75,76,87,88,94,95,96,97,101,108,110,115,126,136)]
+test.two.cv <- test.two[,c(4,5,14,15,16,18,19,20,31,32,33,37,38,39,40,41,44,45,46,48,49,51,53,54,56,57,62,64,66,67,68,69,70,73,76,77,88,89,95,96,97,98,102,109,111,116,127,137)]
+prob.two <- compute(model.ann.two,test.two.cv)
+prob.two.results <- prob.two$net.result
+
+pred.two <- ROCR::prediction(prob.two.results,test.two$any_glaucoma_surgey)
+perf.two <- ROCR::performance(pred.two,"tpr","fpr")
+plot(perf.two)
+
+nn.two.auc <- performance(pred.two,"auc")@y.values[[1]]
+```
+
+### Test 3
+
+```{r test 3, include=FALSE}
+
+
+set.seed(2)
+
+model.ann.three <- neuralnet(any_glaucoma_surgey ~ Age + Gender +systolic_max + systolic_min + systolic_mean  + diastolic_max + diastolic_min + diastolic_mean +pulse_min + pulse_max + pulse_mean  +ever_hospitalized + days_hospitalized + CHF + PVD + Stroke + Dementia + Pulmonary + LiverMild + DM + DMcx  + Renal + Cancer + Mets + med_class.Analgesics_._non.opioids + med_class.Analgesics_._opioids  +  med_class.Anti.rheumatic +  med_class.Antianxiety_agents  + med_class.Antiasthmatic + med_class.Anticoagulants+med_class.Anticonvulsant+med_class.Antidepressants+med_class.Antidiabetic+med_class.Antiemetics+med_class.Antihyperlipidemic+med_class.Antihypertensive+med_class.Beta_blockers+med_class.Calcium_blockers+med_class.Corticosteroids+med_class.Cough.Cold+med_class.Decongestants+med_class.Dermatological+med_class.Diuretics+med_class.Laxatives+med_class.Macrolide_antibiotics+med_class.Misc._antiinfectives+med_class.Ophthalmic+med_class.Ulcer_drugs, 
+                 data=train.three, hidden = 2
+                 )
+
+#test.three.cv <- test.three[,c(3,4,13,14,15,17,18,19,30,31,32,36,37,38,39,40,43,44,45,47,48,50,52,53,55,56,61,63,65,66,67,68,69,72,75,76,87,88,94,95,96,97,101,108,110,115,126,136)]
+test.three.cv <- test.three[,c(4,5,14,15,16,18,19,20,31,32,33,37,38,39,40,41,44,45,46,48,49,51,53,54,56,57,62,64,66,67,68,69,70,73,76,77,88,89,95,96,97,98,102,109,111,116,127,137)]
+prob.three <- neuralnet::compute(model.ann.three,test.three.cv)
+prob.three.results <- prob.three$net.result
+
+pred.three <- ROCR::prediction(prob.three.results,test.three$any_glaucoma_surgey)
+perf.three <- ROCR::performance(pred.three,"tpr","fpr")
+plot(perf.three)
+
+nn.three.auc <- performance(pred.three,"auc")@y.values[[1]]
+```
+
+```{r get sensitivity and specificity}
+opt.cut = function(perf, pred){
+    cut.ind = mapply(FUN=function(x, y, p){
+        d = (x - 0)^2 + (y-1)^2
+        ind = which(d == min(d))
+        c(sensitivity = y[[ind]], specificity = 1-x[[ind]], 
+            cutoff = p[[ind]])
+    }, perf@x.values, perf@y.values, pred@cutoffs)
+}
+print(opt.cut(perf.two, pred.two))
+
+
+acc.perf = performance(pred.two, measure = "acc")
+plot(acc.perf)
+
+
+ind = which.max( slot(acc.perf, "y.values")[[1]] )
+acc = slot(acc.perf, "y.values")[[1]][ind]
+cutoff = slot(acc.perf, "x.values")[[1]][ind]
+print(c(accuracy= acc, cutoff = cutoff))
+
+```
+### Test 4
+
+```{r test 4, include=FALSE}
+
+set.seed(2)
+
+model.ann.four <- neuralnet(any_glaucoma_surgey ~ Age + Gender +systolic_max + systolic_min + systolic_mean  + diastolic_max + diastolic_min + diastolic_mean +pulse_min + pulse_max + pulse_mean  +ever_hospitalized + days_hospitalized + CHF + PVD + Stroke + Dementia + Pulmonary + LiverMild + DM + DMcx  + Renal + Cancer + Mets + med_class.Analgesics_._non.opioids + med_class.Analgesics_._opioids  +  med_class.Anti.rheumatic +  med_class.Antianxiety_agents  + med_class.Antiasthmatic + med_class.Anticoagulants+med_class.Anticonvulsant+med_class.Antidepressants+med_class.Antidiabetic+med_class.Antiemetics+med_class.Antihyperlipidemic+med_class.Antihypertensive+med_class.Beta_blockers+med_class.Calcium_blockers+med_class.Corticosteroids+med_class.Cough.Cold+med_class.Decongestants+med_class.Dermatological+med_class.Diuretics+med_class.Laxatives+med_class.Macrolide_antibiotics+med_class.Misc._antiinfectives+med_class.Ophthalmic+med_class.Ulcer_drugs, 
+                 data=train.four, hidden = 2
+                 )
+
+test.four.cv <- test.four[,c(3,4,13,14,15,17,18,19,30,31,32,36,37,38,39,40,43,44,45,47,48,50,52,53,55,56,61,63,65,66,67,68,69,72,75,76,87,88,94,95,96,97,101,108,110,115,126,136)]
+prob.four <- compute(model.ann.four,test.four.cv)
+prob.four.results <- prob.four$net.result
+
+pred.four <- ROCR::prediction(prob.four.results,test.four$any_glaucoma_surgey)
+perf.four <- ROCR::performance(pred.four,"tpr","fpr")
+plot(perf.four)
+
+nn.four.auc <- performance(pred.four,"auc")@y.values[[1]]
+```
+### Test 5
+
+```{r test 5, include=FALSE}
+
+set.seed(2)
+
+model.ann.five <- neuralnet(any_glaucoma_surgey ~ Age + Gender +systolic_max + systolic_min + systolic_mean  + diastolic_max + diastolic_min + diastolic_mean +pulse_min + pulse_max + pulse_mean  +ever_hospitalized + days_hospitalized + CHF + PVD + Stroke + Dementia + Pulmonary + LiverMild + DM + DMcx  + Renal + Cancer + Mets + med_class.Analgesics_._non.opioids + med_class.Analgesics_._opioids  +  med_class.Anti.rheumatic +  med_class.Antianxiety_agents  + med_class.Antiasthmatic + med_class.Anticoagulants+med_class.Anticonvulsant+med_class.Antidepressants+med_class.Antidiabetic+med_class.Antiemetics+med_class.Antihyperlipidemic+med_class.Antihypertensive+med_class.Beta_blockers+med_class.Calcium_blockers+med_class.Corticosteroids+med_class.Cough.Cold+med_class.Decongestants+med_class.Dermatological+med_class.Diuretics+med_class.Laxatives+med_class.Macrolide_antibiotics+med_class.Misc._antiinfectives+med_class.Ophthalmic+med_class.Ulcer_drugs, 
+                 data=train.five, hidden = 2
+                 )
+
+test.five.cv <- test.five[,c(3,4,13,14,15,17,18,19,30,31,32,36,37,38,39,40,43,44,45,47,48,50,52,53,55,56,61,63,65,66,67,68,69,72,75,76,87,88,94,95,96,97,101,108,110,115,126,136)]
+prob.five <- compute(model.ann.five,test.five.cv)
+prob.five.results <- prob.five$net.result
+
+pred.five <- ROCR::prediction(prob.five.results,test.five$any_glaucoma_surgey)
+perf.five <- ROCR::performance(pred.five,"tpr","fpr")
+plot(perf.five)
+
+nn.five.auc <- performance(pred.five,"auc")@y.values[[1]]
+
+```
+### COMAPRE ROC
+
+```{r roc comapre}
+
+print(nn.one.auc)
+print(nn.two.auc)
+print(nn.three.auc)
+print(nn.four.auc)
+print(nn.five.auc)
+
+```
+
+## Results of Best Model
+
+```{r looking at the best}
+
+prob.two.transform <- (prob.two.results*(max(train.two$any_glaucoma_surgey) - min(train.two$any_glaucoma_surgey))) + min(train.two$any_glaucoma_surgey)
+
+
+plot(test.two$any_glaucoma_surgey,prob.two.transform)
+```
+
+## Evaluating This Model
+
+### Discrimination (C-Statistic aka AUC)
+
+```{r AUC}
+
+plot(perf.two,main="ROC Curve for Artificial Neural Network",col=2,lwd=2)
+abline(a=0,b=1,lwd=2,lty=2,col="gray")
+
+
+```
+
+### Caibration (Hoslem-Lemeshow)
+
+```{r calibration}
+
+
+library(gbm)
+calibrate.plot(test.two$any_glaucoma_surgey, prob.two.results)
+```
+
+
+```{r Saving Docs}
+
+clean_data$cv_group <- numeric_data$cv_group
+
+final_test_set <- clean_data[which(clean_data$cv_group!= 2),]
+final_training_set <- clean_data[which(clean_data$cv_group== 2),]
+
+
+#importance_scores <- importance(model.rf.two)
+
+write.csv(final_test_set, "Final_Test_Set_ANN_Dec10.csv")
+write.csv(final_training_set, "Final_Training_Set_ANN_Dec10.csv")
+
+
+```
