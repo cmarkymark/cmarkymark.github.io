@@ -5,6 +5,10 @@ date: "December 8, 2018"
 output: html_document
 ---
 
+## In This Document
+
+Contained within in is the code to run 5-fold cross validation utilizing a logisitic regression.  The details of implementation can be found within.
+
 ```{r global options}
 library(tidyverse)
 library(tableone)
@@ -13,10 +17,6 @@ library(psych)
 options(digits = 2)
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
-
-## Analytic Plan
-
-We shall conduct a series of multivariate logisitic regression in order to determine factors related to needing glaucoma surgery.  First, we shall split our variables up into 3 categories : 1) vital statistics and hosptalizations, 2) diagnoses, and 3) prescribed medications.  We shall conduct a multivariate regression for each of these variable categories, and finally run a final model combining variables.
 
 ## Uploading and Cleaning the Final Dataset
 
@@ -30,34 +30,34 @@ df <- read.csv("Dec8_Dataset.csv", header=TRUE)
 
 ### Exclusion Criteria
 
-So, now we need to exclude people based on certain factors.  There are two primary exclusion criteria, the first being that patients must have been in care in the UC system prior to their surgery (ie we dont want people who just came to UC for surgery, as they will skew the results towards non-significance)
+So, now we need to exclude people based on certain factors.  There are two primary exclusion criteria, the first being that patients must have been in care in the UC system 6 months prior to their surgery (ie we dont want people who just came to UC for surgery, as they will skew the results towards non-significance)
 
 ```{r pressure, echo=FALSE}
 
-clean_data <- data.frame(matrix(nrow=0,ncol=ncol(df)))
-colnames(clean_data) <- colnames(df)
+clean_data <- data.frame(matrix(nrow=0,ncol=ncol(df))) #this will be our final dataset
+colnames(clean_data) <- colnames(df) #set the column names 
 
-surgery_exclude_data <- data.frame(matrix(nrow=0,ncol=ncol(df)))
+surgery_exclude_data <- data.frame(matrix(nrow=0,ncol=ncol(df))) #this will contain all patients excluded because they didn't have 6 months of records prior to their first surgery
 colnames(surgery_exclude_data) <- colnames(df)
 
-newpatient_exclude_data <- data.frame(matrix(nrow=0,ncol=ncol(df)))
+newpatient_exclude_data <- data.frame(matrix(nrow=0,ncol=ncol(df))) #this will contain non-surgery patients with less than six months of data
 colnames(newpatient_exclude_data) <- colnames(df)
 
-no_vital_data_exclude_data <- data.frame(matrix(nrow=0,ncol=ncol(df)))
+no_vital_data_exclude_data <- data.frame(matrix(nrow=0,ncol=ncol(df))) #this will contain all patients with no vital records
 colnames(no_vital_data_exclude_data) <- colnames(df)
 
-for(patient_num in 1:nrow(df))
+for(patient_num in 1:nrow(df)) #loop through all patients in the uploaded dataset
 { 
-  if(!is.na(df$first_surgery_date[patient_num]) && !is.na(df$first_vitals_contact_date[patient_num]))
+  if(!is.na(df$first_surgery_date[patient_num]) && !is.na(df$first_vitals_contact_date[patient_num])) #if patient has had surgery and has vital records
   {
-    time_test <- difftime(df$first_surgery_date[patient_num], df$first_vitals_contact_date[patient_num], units = "days")
-    if(time_test > 180)
+    time_test <- difftime(df$first_surgery_date[patient_num], df$first_vitals_contact_date[patient_num], units = "days") #check the time difference between first vital contact and first surgery
+    if(time_test > 180) #if length is greater than 6 months (ie 180 days), include
     {
       
       clean_data <- rbind(clean_data, df[patient_num,])
     } else {surgery_exclude_data <- rbind(surgery_exclude_data, df[patient_num,])}
   } 
-  else if(is.na(df$first_surgery_date[patient_num]) && !is.na(df$first_vitals_contact_date[patient_num]))
+  else if(is.na(df$first_surgery_date[patient_num]) && !is.na(df$first_vitals_contact_date[patient_num])) #for non-surgery patients
   {
     time_test2 <- difftime(as.Date("11/01/2018","%m/%d/%Y"), df$first_vitals_contact_date[patient_num], units = "days")
     if(time_test2 > 180)
@@ -76,11 +76,11 @@ for(patient_num in 1:nrow(df))
 
 ```
 
-### After Exlcusions
 
-We need to decide if we want the exclusion to be 1 year or 6 months
 
 ### Imputing Missing Data
+
+NOTE: All variables we imputed we decided to exclude from final analyses, hence why they are all commented out.  The blood pressure standard deviation variables are reflecting on a similar thing as the mean, min, and max variables combined.  Too much data was missing for alcohol use.  Smoking status and BMI did not come up as significant in early runs of the model, so they were excluded.
 
 ```{r impute}
 
@@ -124,13 +124,17 @@ tone_vars[12] <- NA
 tone_vars[28] <- NA
 
 tone <- tableone::CreateTableOne(vars = tone_vars, strata = c("any_glaucoma_surgey") ,data =  clean_data)
+tone #this prints out the descriptive statistics, stratified by ever needing surgery
 
 ```
+
+##Checking for Bivariate Correlations
+
 ```{r Bivariate, warning=FALSE}
 bi.final <- data.frame(matrix(nrow = 0, ncol = 3))
 for(i in 3:ncol(clean_data))
 {
-if(i == 11 || i == 12 || i == 22 || i == 23 || i == 24 || i == 25 || i == 26 ||i == 28 || i == 135 || i == 130 || i == 123 || i == 109 || i == 104 || i == 92 || i == 84 ||  i == 78 || i == 54 || i == 53){}
+if(i == 11 || i == 12 || i == 22 || i == 23 || i == 24 || i == 25 || i == 26 ||i == 28 || i == 135 || i == 130 || i == 123 || i == 109 || i == 104 || i == 92 || i == 84 ||  i == 78 || i == 54 || i == 53){} ## this messy code removes the columns which contained data we didn't want to check or simply couldn't (do to 100% response for both variables)
   else{
 iv <- colnames(clean_data)[i] 
 bi.model <- glm (any_glaucoma_surgey ~ get(iv), data = clean_data, family = binomial(link="logit"))
@@ -141,23 +145,27 @@ bi.final <- rbind(bi.final, bi.results)
 }
 }
 
-
-
+# this table represents all variables found to be significant and their OR
 bi.signif <- bi.final[which(bi.final$`2.5 %` > 1 | bi.final$`97.5 %`<1),]
 ```
 
 
 ## Creating the five groups for cross-validation
 
-```{r fivegroups}
+So, now we will move into the cross-validation.  Given the smaller sample size we shall do five fold and thus we need to split the popuation randommly into five groups.  This randomization is done below.
 
+```{r fivegroups}
+#create a vector with the appropriate number of 1,2,3,4,5
 values <- rep(1:5, length.out=391)
+#randomly sort this vector
 random <- sample(values)
+#add this vector to the data, essentially assigning each row a random group
 clean_data$cv_group <- random
 
 ```
 
 ## Defining Our Five Groups
+So now we need to define our 5 training-test sets, which is done in the next code chunk
 
 ```{r define groups}
 
@@ -180,6 +188,8 @@ test.five <- clean_data[which(clean_data$cv_group== 5),]
 
 ## Running Cross Val
 
+So, now we shall train the 5 models.  We will run a stepwise, bidirectional regression to determine the final model (ie will be unique for each of the models) and then run the final model with the selected results.  We will then pull out the AORs, AUC score, and plot the ROC curve.  We will choose the model with the best performing AUROC score.  (future efforts we shall report the average score of all 5)
+
 ### Test 1
 
 ```{r test 1, include=FALSE}
@@ -199,17 +209,15 @@ step.results.one <- step(model.null.one,
              direction="both",
              test="Chisq",
              data=clean_data)
-```
-
-```{r final model 1}
 
 final.model.one <- eval(step.results.one$call)
 
-pred <- predict.glm(final.model.one, test.one)
-test.one$probs <- exp(pred)/(1+exp(pred))
-library(pROC)
-g.one <- roc(any_glaucoma_surgey ~ probs, data = test.one)
-plot(g.one)
+lr.one.pr <- predict(final.model.one, test.one, type="response") # this sequence used to plot the ROC Curve
+lr.one.pred <- prediction(lr.one.pr,test.one$any_glaucoma_surgey)
+lr.one.perf <- performance(lr.one.pred,"tpr","fpr")
+
+plot(lr.one.perf,main="ROC Curve for Logistic Regression",col=2,lwd=2)
+abline(a=0,b=1,lwd=2,lty=2,col="gray")
 
 ```
 
@@ -232,19 +240,8 @@ step.results.two <- step(model.null.two,
              direction="both",
              test="Chisq",
              data=clean_data)
-```
-
-```{r final model 2}
 
 final.model.two <- eval(step.results.two$call)
-
-pred <- predict(final.model.two, test.two)
-test.two$probs <- exp(pred)/(1+exp(pred))
-library(pROC)
-g.two <- roc(any_glaucoma_surgey ~ probs, data = test.two)
-plot(g.two,main="ROC Curve for Logistic Regression",col=2,lwd=2, legacy.axes = TRUE, xlab = "False positive rate", ylab = "True positive rate")
-
-
 
 lr.two.pr <- predict(final.model.two, test.two, type="response")
 lr.two.pred <- prediction(lr.two.pr,test.two$any_glaucoma_surgey)
@@ -255,6 +252,10 @@ abline(a=0,b=1,lwd=2,lty=2,col="gray")
 
 
 ```
+
+#### Extra Code Snippet
+
+Sorry this is kind of out of place, but this code was utilized to determine the optimal cut point of the model and to determine the sensitivity, specificity, and accuracy of the model at said cut point
 
 ```{r get sensitivity and specificity}
 opt.cut = function(perf, pred){
@@ -297,17 +298,16 @@ step.results.three <- step(model.null.three,
              direction="both",
              test="Chisq",
              data=clean_data)
-```
 
-```{r final model 3, include=FALSE}
 
 final.model.three <- eval(step.results.three$call)
 
-pred <- predict.glm(final.model.three, test.three)
-test.three$probs <- exp(pred)/(1+exp(pred))
-library(pROC)
-g.three <- roc(any_glaucoma_surgey ~ probs, data = test.three)
-plot(g.three)
+lr.three.pr <- predict(final.model.three, test.three, type="response") # this sequence used to plot the ROC Curve
+lr.three.pred <- prediction(lr.three.pr,test.three$any_glaucoma_surgey)
+lr.three.perf <- performance(lr.three.pred,"tpr","fpr")
+
+plot(lr.three.perf,main="ROC Curve for Logistic Regression",col=2,lwd=2)
+abline(a=0,b=1,lwd=2,lty=2,col="gray")
 
 ```
 
@@ -330,17 +330,15 @@ step.results.four <- step(model.null.four,
              direction="both",
              test="Chisq",
              data=clean_data)
-```
-
-```{r final model 4}
 
 final.model.four <- eval(step.results.four$call)
 
-pred <- predict.glm(final.model.four, test.four)
-test.four$probs <- exp(pred)/(1+exp(pred))
-library(pROC)
-g.four <- roc(any_glaucoma_surgey ~ probs, data = test.four)
-plot(g.four)
+lr.four.pr <- predict(final.model.four, test.four, type="response") # this sequence used to plot the ROC Curve
+lr.four.pred <- prediction(lr.four.pr,test.four$any_glaucoma_surgey)
+lr.four.perf <- performance(lr.four.pred,"tpr","fpr")
+
+plot(lr.four.perf,main="ROC Curve for Logistic Regression",col=2,lwd=2)
+abline(a=0,b=1,lwd=2,lty=2,col="gray")
 
 ```
 
@@ -363,38 +361,47 @@ step.results.five <- step(model.null.five,
              direction="both",
              test="Chisq",
              data=clean_data)
-```
 
-```{r final model 5}
 
 final.model.five <- eval(step.results.five$call)
 
-pred <- predict.glm(final.model.five, test.five)
-test.five$probs <- exp(pred)/(1+exp(pred))
-library(pROC)
-g.five <- roc(any_glaucoma_surgey ~ probs, data = test.five)
-plot(g.five)
+lr.five.pr <- predict(final.model.five, test.five, type="response") # this sequence used to plot the ROC Curve
+lr.five.pred <- prediction(lr.five.pr,test.five$any_glaucoma_surgey)
+lr.five.perf <- performance(lr.five.pred,"tpr","fpr")
+
+plot(lr.five.perf,main="ROC Curve for Logistic Regression",col=2,lwd=2)
+abline(a=0,b=1,lwd=2,lty=2,col="gray")
 
 ```
 
 ### COMAPRE ROC
 
+Here we will compute and display the ROC of each of the five models so we may choose the best performing
+
 ```{r roc comapre}
 
-print(g.one$auc)
-print(g.two$auc)
-print(g.three$auc)
-print(g.four$auc)
-print(g.five$auc)
+rf.one.auc <- performance(rf.one.pred,"auc")@y.values[[1]]
+rf.two.auc <- performance(rf.two.pred,"auc")@y.values[[1]]
+rf.three.auc <- performance(rf.three.pred,"auc")@y.values[[1]]
+rf.four.auc <- performance(rf.four.pred,"auc")@y.values[[1]]
+rf.five.auc <- performance(rf.five.pred,"auc")@y.values[[1]]
+
+print(rf.one.auc)
+print(rf.two.auc)
+print(rf.three.auc)
+print(rf.four.auc)
+print(rf.five.auc)
 
 ```
 
 ## Results of Best Model
 
+So now we will choose the best model and look at the AORS and some evaluation metrics
+
 ```{r looking at the best}
 
 results <- round(exp(cbind(OR = coef(final.model.five), confint(final.model.five))),2)
-results
+results # this will returns the Odds Ratios and the confidence intervals
 
 ```
 
@@ -402,14 +409,11 @@ results
 
 ### Discrimination (C-Statistic aka AUC)
 
-```{r AUC}
-
-g.five$auc
-plot(g.five)
-
-```
+We can go back up to the code for running the models to see the code for plotting the AUC
 
 ### Caibration (Hoslem-Lemeshow)
+
+This shall return the Hoslem-Lemeshow score and print a calibration plot, displaying confidence intervals
 
 ```{r calibration}
 
@@ -419,6 +423,7 @@ library(gbm)
 calibrate.plot(test.five$any_glaucoma_surgey, test.five$probs)
 ```
 
+## Finally, We Will Save Everything
 
 ```{r Saving Docs}
 
@@ -435,14 +440,6 @@ write.csv(final_ORs, "final_logistic_regression_results.csv")
 write.csv(final_model_coefficients, "final_model_coefficients.csv")
 ```
 
-## Now We Are GOing to Do Random Forests
 
-It is a little different, we don't do crossval.  Random forest algorithm kind of automatically does this for us.  
-
-```{r libraries}
-library(randomForest)
-```
-
-## Running random Forest 
 
 
