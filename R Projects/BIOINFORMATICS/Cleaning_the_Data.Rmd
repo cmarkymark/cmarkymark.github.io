@@ -1,0 +1,617 @@
+---
+title: "Cleaning the Data"
+author: "Charles Marks"
+date: "November 30, 2018"
+output: html_document
+---
+
+## Readme
+
+This file contains the code used to first upload and clean the data for use in analysis.  This doc only contains cleaning, not doing exclusions in this doc
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(icd)
+library(varhandle)
+```
+
+## First, Uploading the Data to R
+
+We have three data tables that contain our entire dataset, so we first need to upload these datasets into R so we can work with them.  Due to some issues with uploading xlsx files, the three xlsx files were saved as csvs (where each sheet represents its own sheet)
+
+```{r upload}
+
+
+demographics <- read.csv("Demographics.csv", header = TRUE)
+medications <- read.csv("Medications.csv", header = TRUE)
+hospitalizations <- read.csv("Hospitalization.csv", header = TRUE)
+social_hx <- read.csv("Social_Hx.csv", header = TRUE)
+vitals <- read.csv("Vitals.csv", header = TRUE)
+diagnoses <- read.csv("Diagnoses.csv", header = TRUE)
+
+hospital_billing_CPT_procs <- read.csv("Hospital_Billing_Procs.csv", header = TRUE)
+prof_billing_CPT_procs <- read.csv("Prof_Billing_CPT_Procs.csv", header = TRUE)
+surgeries <- read.csv("Surgeries.csv", header = TRUE)
+orders_procedures <- read.csv("Orders_Procedures.csv", header = TRUE)
+labs <- read.csv("Labs.csv", header = TRUE)
+
+medication_class <- read.csv("Medication_Thera_Class.csv", header = TRUE)
+rxnorm <- read.csv("RxNorm.csv", header = TRUE)
+  
+
+```
+
+## Start Generating the Final Dataset
+
+```{r pressure, echo=FALSE}
+
+# We will use the demographics table as our baseline data table, as in theory, it contains all of the subjects
+final_dataset <- demographics
+#for some reason the ids in this table were factored, so need to unfactor
+final_dataset$MRN <- as.numeric(as.character(final_dataset$MRN))
+#now remove all those with no IDs
+final_dataset <- final_dataset[!(is.na(final_dataset$MRN)),]
+```
+## Primary Outcome -- Any Glaucoma Surgery
+
+### Surgeries
+
+So we will go through the surgeries tables and create a series of variables related to surgeries
+
+```{r Surgeries}
+
+## we are going to first fix the date field of the surgery table
+surgeries$surgery_date <- as.Date(as.character.Date(surgeries$surgery_date),"%m/%d/%y")
+
+## we will sort the surgeries by date for convenience
+surgeries <- surgeries[order(surgeries$surgery_date),]
+
+## we are going to create several surgery variables
+
+final_dataset$any_glaucoma_surgey <- 0
+final_dataset$incisional_glaucoma_surgery <- 0
+final_dataset$min_invasive_glaucoma_surgery <- 0
+final_dataset$laser_glaucoma_surgery <- 0
+final_dataset$surgery_count <- 0 
+final_dataset$first_surgery_date <- NA
+
+## now we are going to loop for the dataset and check for surgeries
+
+## first we need to note our surgery codes
+incisional_glaucoma_surgery <- c("66160","66170","66172","66179","66180","66185")
+min_invasive_glaucoma_surgery <- c("66174","66175","66183","65850","65820","0191T","0449T")
+laser_glaucoma_surgery <- c("66710","66711","65855")
+
+## now we loop, patient_num represents the row of the final dataset we are in
+for(patient_num in 1:nrow(final_dataset)){
+  MRN <- final_dataset$MRN[patient_num] #pulls the patient ID
+  patient_surgeries <- surgeries[MRN == surgeries$MRN,] #Pulls all surgeries associated with this patient id
+  if(nrow(patient_surgeries) > 0) #checks to see if there were any surgeries
+  {
+    for(surgery_num in 1:nrow(patient_surgeries)) #goes through each surgery
+    {
+      if(is.element(patient_surgeries$real_cpt_code[surgery_num],incisional_glaucoma_surgery)) #checks for incisional surgery
+      {
+        final_dataset$any_glaucoma_surgey[patient_num] <- 1 
+        final_dataset$incisional_glaucoma_surgery[patient_num] <- 1
+        
+        final_dataset$surgery_count[patient_num] <- 1 + final_dataset$surgery_count[patient_num]
+        
+        if(is.na(final_dataset$first_surgery_date[patient_num])) # checks to see if this is the patients first surgery, since the surgeries are time ordered we can assume this is the first surgery
+        {
+          final_dataset$first_surgery_date[patient_num] <- as.character(patient_surgeries$surgery_date[surgery_num])
+          
+        }
+      }
+      else if(is.element(patient_surgeries$real_cpt_code[surgery_num],min_invasive_glaucoma_surgery)) #checks for minimally invasive surgery
+      {
+        final_dataset$any_glaucoma_surgey[patient_num] <- 1
+        final_dataset$min_invasive_glaucoma_surgery[patient_num] <- 1
+        
+        final_dataset$surgery_count[patient_num] <- 1 + final_dataset$surgery_count[patient_num]
+        
+        if(is.na(final_dataset$first_surgery_date[patient_num]))
+        {
+          final_dataset$first_surgery_date[patient_num] <- as.character(patient_surgeries$surgery_date[surgery_num])
+        
+        }
+      }
+      else if(is.element(patient_surgeries$real_cpt_code[surgery_num],laser_glaucoma_surgery)) #checks for laser surgery
+      {
+        final_dataset$any_glaucoma_surgey[patient_num] <- 1
+        final_dataset$laser_glaucoma_surgery[patient_num] <- 1
+        
+         final_dataset$surgery_count[patient_num] <- 1 + final_dataset$surgery_count[patient_num]
+        
+        if(is.na(final_dataset$first_surgery_date[patient_num]))
+        {
+          final_dataset$first_surgery_date[patient_num] <- as.character(patient_surgeries$surgery_date[surgery_num])
+         
+        }
+      }
+    }
+  }
+}
+  
+## Since many of these variables are binaries, we will factor them so that R recognizes them as categorical versus numerical
+final_dataset$any_glaucoma_surgey <- factor(final_dataset$any_glaucoma_surgey, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$min_invasive_glaucoma_surgery <- factor(final_dataset$min_invasive_glaucoma_surgery, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$laser_glaucoma_surgery <- factor(final_dataset$laser_glaucoma_surgery, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$incisional_glaucoma_surgery <- factor(final_dataset$incisional_glaucoma_surgery, levels = c(0,1), labels = c("No","Yes"))
+
+```
+
+## Vitals
+
+So now we want to pull some health indicators we have from the vitals table!
+
+```{r Vitals}
+
+#first let us define the variables we want to create
+
+final_dataset$systolic_max <- NA
+final_dataset$systolic_min <- NA
+final_dataset$systolic_mean <- NA
+final_dataset$systolic_sd <- NA
+
+final_dataset$diastolic_max <- NA
+final_dataset$diastolic_min <- NA
+final_dataset$diastolic_mean <- NA
+final_dataset$diastolic_sd <- NA
+
+final_dataset$BMI_mean <- NA
+final_dataset$BMI_max <- NA
+final_dataset$BMI_min <- NA
+
+final_dataset$height <- NA
+final_dataset$weight_min <- NA
+final_dataset$weight_max <- NA
+final_dataset$weight_mean <- NA
+
+final_dataset$first_vitals_contact_date <- NA
+final_dataset$vital_entries <- 0
+
+final_dataset$pulse_min <- NA
+final_dataset$pulse_max <- NA
+final_dataset$pulse_mean <- NA
+
+#need to recode the date variable because R can't interpret it correctly
+vitals$contact_date <- as.Date(as.character.Date(vitals$contact_date),"%m/%d/%y")
+#sort vitals by date
+vitals <- vitals[order(vitals$contact_date),]
+#converts height as coded into inches
+vitals$height_inches <- sapply(strsplit(as.character(vitals$height),"'|\""), function(x){12*as.numeric(x[1]) + as.numeric(x[2])})
+
+for(patient_num in 1:nrow(final_dataset)) #loop through all the patients
+{
+  MRN <- final_dataset$MRN[patient_num] #get their MRN
+  surgery_date <- final_dataset$first_surgery_date[patient_num] #pull their surgery date 
+  patient_vitals <- vitals[which(vitals$MRN == MRN),] #pull all their vital records
+
+  #need to check if the patient had surgery, if they had surgery we will exclude all vital records which occurred after the date of first surgery
+  if(!is.na(final_dataset$first_surgery_date[patient_num]))
+    {patient_vitals <- patient_vitals[which(patient_vitals$contact_date < surgery_date),]}
+ 
+  if(nrow(patient_vitals) > 0) #if there are any patient vitals, do the following
+  {
+    final_dataset$vital_entries[patient_num] <- nrow(patient_vitals)
+    
+    final_dataset$systolic_max[patient_num] <- max(patient_vitals$bp_systolic, na.rm = TRUE)
+    final_dataset$systolic_min[patient_num] <- min(patient_vitals$bp_systolic, na.rm = TRUE)
+    final_dataset$systolic_mean[patient_num] <- mean(patient_vitals$bp_systolic, na.rm = TRUE)
+    final_dataset$systolic_sd[patient_num] <- sd(patient_vitals$bp_systolic, na.rm = TRUE)
+    
+    final_dataset$diastolic_max[patient_num] <- max(patient_vitals$bp_diastolic, na.rm = TRUE)
+    final_dataset$diastolic_min[patient_num] <- min(patient_vitals$bp_diastolic, na.rm = TRUE)
+    final_dataset$diastolic_mean[patient_num] <- mean(patient_vitals$bp_diastolic, na.rm = TRUE)
+    final_dataset$diastolic_sd[patient_num] <- sd(patient_vitals$bp_diastolic, na.rm = TRUE)
+
+    final_dataset$height[patient_num] <- mean(patient_vitals$height_inches, na.rm = TRUE)
+    
+    final_dataset$weight_min[patient_num] <- min(patient_vitals$Weight.in.lbs, na.rm = TRUE)
+    final_dataset$weight_max[patient_num] <- max(patient_vitals$Weight.in.lbs, na.rm = TRUE)
+    final_dataset$weight_mean[patient_num] <- mean(patient_vitals$Weight.in.lbs, na.rm = TRUE)
+    
+    final_dataset$BMI_max[patient_num] <- (final_dataset$weight_max[patient_num]*0.45)/((final_dataset$height[patient_num])*(final_dataset$height[patient_num])*.025*.025) 
+    final_dataset$BMI_min[patient_num] <- (final_dataset$weight_min[patient_num]*0.45)/((final_dataset$height[patient_num])*(final_dataset$height[patient_num])*.025*.025) 
+    final_dataset$BMI_mean[patient_num] <- (final_dataset$weight_mean[patient_num]*0.45)/((final_dataset$height[patient_num])*(final_dataset$height[patient_num])*.025*.025) 
+    
+    final_dataset$pulse_max[patient_num] <- max(patient_vitals$pulse, na.rm = TRUE) 
+    final_dataset$pulse_min[patient_num] <- min(patient_vitals$pulse, na.rm = TRUE) 
+    final_dataset$pulse_mean[patient_num] <- mean(patient_vitals$pulse, na.rm = TRUE) 
+  
+    final_dataset$first_vitals_contact_date[patient_num] <- as.character(patient_vitals$contact_date[1])
+  }
+    
+}
+
+```
+### Social_Hx
+
+Next, we will add information about alcohol and tobacco use
+
+```{r social}
+
+final_dataset$alcohol_use <- NA
+final_dataset$smoking_status <- NA
+
+for(patient_num in 1:nrow(final_dataset)){ # loop through all of the patients
+  MRN <- final_dataset$MRN[patient_num] #pull MRN number
+  patient_social <- social_hx[which(social_hx$MRN == MRN),] #pull their social_hx data
+  
+  if(is.element("Yes",patient_social$Alcohol_use)) #check for history of alcohol use
+  {
+    final_dataset$alcohol_use[patient_num] <- 1
+  } else if(is.element("No",patient_social$Alcohol_use))
+  {
+    final_dataset$alcohol_use[patient_num] <- 0
+  }
+ 
+  if(is.element("Yes", patient_social$Tobacco_user) || is.element("Passive", patient_social$Tobacco_user)) #check for history of smoking
+  {
+    final_dataset$smoking_status[patient_num] <- 1
+  } else if(is.element("Quit", patient_social$Tobacco_user))
+  {
+    final_dataset$smoking_status[patient_num] <- 2
+  } else if(is.element("Never", patient_social$Tobacco_user))
+  {
+    final_dataset$smoking_status[patient_num] <- 0
+  }
+  
+}
+#since this data is categorical we need to recode it appropriately
+final_dataset$smoking_status <- factor(final_dataset$smoking_status, levels = c(0,1,2), labels = c("Never", "Former","Current"))
+final_dataset$alcohol_use <- factor(final_dataset$alcohol_use,levels=c(0,1), labels=c("No","Yes"))
+
+
+```
+
+## Diagnoses (ie comorbidities)
+
+Here we will use diagnoses table data (ICD 9 or 10, will try both) to determine if patients exhibited specific comorbidities prior to their first surgery
+
+```{r diagnoses}
+
+# going to use the icd library
+
+final_dataset$MI <- 0
+final_dataset$CHF <- 0
+final_dataset$PVD <- 0
+final_dataset$Stroke <- 0
+final_dataset$Dementia <- 0
+final_dataset$Pulmonary <- 0
+final_dataset$Rheumatic <- 0
+final_dataset$PUD <- 0
+final_dataset$LiverMild <- 0
+final_dataset$DM <- 0
+final_dataset$DMcx <- 0
+final_dataset$Paralysis <- 0
+final_dataset$Renal <- 0
+final_dataset$Cancer <- 0
+final_dataset$LiverSevere <- 0
+final_dataset$Mets <- 0
+final_dataset$HIV <- 0
+
+#need to convert the the date value into a date that R recognizes
+diagnoses$date <- as.Date(as.character.Date(diagnoses$contact_date),"%m/%d/%y")
+
+for(patient_num in 1:nrow(final_dataset)) #loop through all patients
+{
+  MRN <- final_dataset$MRN[patient_num] #grab MRN number
+  surgery_date <- final_dataset$first_surgery_date[patient_num] #pull surgery date
+ 
+  patient_diagnoses <- diagnoses[which(diagnoses$MRN == MRN),] #pull al diagnoses data for said patient
+  if(!is.na(surgery_date)) #if patient has had surgery, only include diagnoses preceding surgery
+  {patient_diagnoses <- patient_diagnoses[which(patient_diagnoses$date < surgery_date),]}
+  
+  if(nrow(patient_diagnoses)>0) #if patients have any diagnosis records
+  {
+    #need to do appropriate formating for the icd library function icd_10_comorbi_charlson
+    long_form_pd <- data.frame(matrix(nrow = nrow(patient_diagnoses), ncol = 0))
+  
+    long_form_pd$MRN <- MRN
+    long_form_pd$icd10 <- patient_diagnoses$ICD10_code
+    cc <- data.frame(icd10_comorbid_charlson(long_form_pd))
+  
+    if(cc$MI[1]) {final_dataset$MI[patient_num] <- 1} 
+    if(cc$CHF[1]) {final_dataset$CHF[patient_num] <- 1}
+    if(cc$PVD[1]) {final_dataset$PVD[patient_num] <- 1}
+    if(cc$Stroke[1]) {final_dataset$Stroke[patient_num] <- 1}
+    if(cc$Dementia[1]) {final_dataset$Dementia[patient_num] <- 1}
+    if(cc$Pulmonary[1]) {final_dataset$Pulmonary[patient_num] <- 1}
+    if(cc$Rheumatic[1]) {final_dataset$Rheumatic[patient_num] <- 1}
+    if(cc$PUD[1]) {final_dataset$PUD[patient_num] <- 1}
+    if(cc$LiverMild[1]) {final_dataset$LiverMild[patient_num] <- 1}
+    if(cc$DM[1]) {final_dataset$DM[patient_num] <- 1}
+    if(cc$DMcx[1]) {final_dataset$DMcx[patient_num] <- 1}
+    if(cc$Paralysis[1]) {final_dataset$Paralysis[patient_num] <- 1}
+    if(cc$Renal[1]) {final_dataset$Renal[patient_num] <- 1}
+    if(cc$Cancer[1]) {final_dataset$Cancer[patient_num] <- 1}
+    if(cc$LiverSevere[1]) {final_dataset$LiverSevere[patient_num] <- 1}
+    if(cc$Mets[1]) {final_dataset$Mets[patient_num] <- 1}
+    if(cc$HIV[1]) {final_dataset$HIV[patient_num] <- 1}
+    
+  }
+  
+  
+}
+#finally, given that this is categorical data, we need to code it appropriately
+final_dataset$MI <- factor(final_dataset$MI, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$CHF <- factor(final_dataset$CHF, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$PVD <- factor(final_dataset$PVD, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$Stroke <- factor(final_dataset$Stroke, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$Dementia <- factor(final_dataset$Dementia, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$Pulmonary <- factor(final_dataset$Pulmonary, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$Rheumatic <- factor(final_dataset$Rheumatic, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$PUD <- factor(final_dataset$PUD, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$LiverMild <- factor(final_dataset$LiverMild, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$DM <- factor(final_dataset$DM, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$DMcx <- factor(final_dataset$DMcx, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$Paralysis <- factor(final_dataset$Paralysis, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$Renal <- factor(final_dataset$Renal, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$Cancer <- factor(final_dataset$Cancer, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$LiverSevere <- factor(final_dataset$LiverSevere, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$Mets <- factor(final_dataset$Mets, levels = c(0,1), labels = c("No","Yes"))
+final_dataset$HIV <- factor(final_dataset$HIV, levels = c(0,1), labels = c("No","Yes"))
+
+
+```
+
+## Hospitalizations
+
+Next we want to see how many hospitalizations PRECEDED surgery, if surgery occurred
+
+```{r Hospitalizations}
+
+final_dataset$ever_hospitalized <- 0
+final_dataset$days_hospitalized <- 0
+#need to convert the date value into one that R recognizes
+hospitalizations$date <- as.Date(as.character.Date(hospitalizations$hosp_admsn_time),"%m/%d/%y")
+
+for(patient_num in 1:nrow(final_dataset)) #loop through all patients
+{
+  MRN <- final_dataset$MRN[patient_num] #get patient MRN
+  surgery_date <- final_dataset$first_surgery_date[patient_num] #get their first surgery data
+  patient_hospitalizations <- hospitalizations[which(hospitalizations$MRN == MRN),] #pull their hospitalization records
+  if(!is.na(surgery_date)) #if they had surgery, only include hospitalizations prior to first surgery
+  {
+    patient_hospitalizations <- patient_hospitalizations[which(patient_hospitalizations$date < surgery_date),]
+  }
+  if(nrow(patient_hospitalizations) > 0)
+  {
+    final_dataset$ever_hospitalized[patient_num] <- 1
+    final_dataset$days_hospitalized[patient_num] <- length(unique(patient_hospitalizations$date))
+  }
+}
+#recode this categorical variable
+final_dataset$ever_hospitalized <- factor(final_dataset$ever_hospitalized, levels = c(0,1), labels = c("No","Yes"))
+
+```
+
+## Medications
+
+Next, we want to add relevant information about medications prescribed and taken PRECEDING SURGERY EVENTS
+
+```{r Medications}
+
+
+#we want to only include medications that were used for at least two weeks so we need the duration of prescription (using Intent To Treat paradigm)
+medications$start_med <- as.Date(as.character.Date(medications$start_date),"%m/%d/%y")
+medications$end_med <- as.Date(as.character.Date(medications$end_date),"%m/%d/%y")
+medications$med_duration <- difftime(medications$end_med, medications$start_med, units = "days")
+
+# first we need to reformat the mediation table a little bit to incude the medication class as specificed in the medication class table
+medications$med_class <- NA
+
+for(i in 1:nrow(medications)) #loop through all of the medications
+{
+  
+  med_id <- medications$medication_id[i] #pull medication ID
+  med_row <- medication_class[medication_class$MEDICATION_ID == med_id,] #get the associated data from medication_class table for this medication
+  med_class <- med_row[1,6] #get the name of the class
+  medications$med_class[i] <- as.character(med_class) #insert name of class into the medications table
+  
+}
+#so first we are going to just factor the medication classes, since it is categorical
+medications$med_class <- factor(medications$med_class)
+
+#then, we want a binary variable (YES/NO) for each medication class, so we are going to use the to.dummy functon to spread the single colum med_class into a set of binary columns
+
+spread <- to.dummy(medications$med_class, "med_class")
+
+#now we will bind all of these columns to the medication table so that the binary values are in the medication table
+medications <- cbind(medications, spread)
+##21:108
+
+# we will use this df to track a single patients medications
+medications_df <- data.frame(matrix(nrow = 0, ncol = 88))
+
+for(patient_num in 1:nrow(final_dataset)) # loop through all of the patients
+{
+  MRN <- final_dataset$MRN[patient_num] #get their MRN
+  surgery_date <- final_dataset$first_surgery_date[patient_num] # get their surgery date
+  
+  patient_meds <- medications[which(medications$MRN == MRN),] #get their medications records
+ 
+  if(!is.na(surgery_date)) #if they had surgery, only include records prior to first surgery
+  {
+    patient_meds <- patient_meds[which(patient_meds$end_med < surgery_date),]
+  }
+  if(nrow(patient_meds) > 0) { #only include records in which medication was prescribed for at least two weeks
+    patient_meds <- patient_meds[which(patient_meds$med_duration > 13),]
+  }
+
+  if(nrow(patient_meds) > 0) 
+  {
+    patient_sums <- colSums(patient_meds[,21:108]) #this will sum all of the binary columns, so that any column (medication class) with value greater than0 represents a medication class they took
+    for(count in 1:length(patient_sums)) # loop through all of the results
+    {
+     
+      if(patient_sums[count] > 0) #if value is greater than 0, recode it as 1 for consistency
+      {
+        patient_sums[count] <- 1
+      }
+    }
+    medications_df <- rbind(medications_df, patient_sums) #add this to the table
+  } else 
+  {
+    zeros <- integer(88) #this is if a patient has no medication records, we still need to input a bunch of zeros
+    medications_df <- rbind(medications_df, zeros)
+  }
+}
+#add teh appropriate column names
+colnames(medications_df) <- colnames(spread)
+
+#loop through and factor all as they are categorical variables
+for(i in 1:ncol(medications_df))
+{
+  medications_df[,i] <- factor(medications_df[,i], levels = c(0,1),labels=c("No","Yes"))
+}
+#add the table of medications to the final dataset
+final_dataset <- cbind(final_dataset,medications_df)
+
+
+```
+## Labs 
+
+```{r Labs}
+
+final_dataset$sodium <- NA
+final_dataset$potassium <- NA
+final_dataset$phos <- NA
+final_dataset$bicarbonate <- NA
+final_dataset$aniongap <- NA
+final_dataset$creatinine <- NA
+final_dataset$albumin <- NA
+final_dataset$hgb <- NA
+final_dataset$wbc <- NA
+final_dataset$plt <- NA
+final_dataset$iron <- NA
+final_dataset$ironsaturation <- NA
+final_dataset$mcv <- NA
+final_dataset$rdw <- NA
+final_dataset$mchc <- NA
+final_dataset$ldlchol <- NA
+final_dataset$triglycerides <- NA
+final_dataset$nonhdlchol <- NA
+final_dataset$hdl <- NA
+final_dataset$glucose <- NA
+final_dataset$a1c <- NA
+final_dataset$tsh <- NA
+final_dataset$sedrate <- NA
+final_dataset$lactate <- NA
+
+
+#Need to convert the data to a format R can read
+labs$date <- as.Date(as.character.Date(labs$result_time),"%m/%d/%y")
+for(patient_num in 1:nrow(final_dataset)) #loop through all patients
+{
+  MRN <- final_dataset$MRN[patient_num] #get patient MRN
+  surgery_date <- final_dataset$first_surgery_date[patient_num] #get first surgery date
+  patient_labs <- labs[which(labs$MRN == MRN),] #get all lab records
+ 
+  if(!is.na(surgery_date)) #only include lab records prior to first surgery
+  {
+    patient_labs <- patient_labs[which(patient_labs$date < surgery_date),]
+  }
+  if(nrow(patient_labs) >= 0)
+  {
+    
+    #SODIUM
+    patient_sodium <- patient_labs[which(patient_labs$component_id == 2106),]
+    final_dataset$sodium[patient_num] <- mean(patient_sodium$Value.as.Number, na.rm = TRUE)
+    
+    #POTASSIUM 
+    patient_potassium <- patient_labs[which(patient_labs$component_id == 2107),]
+    final_dataset$potassium[patient_num] <- mean(patient_potassium$Value.as.Number, na.rm = TRUE)
+#PHOS
+    patient_phos <- patient_labs[which(patient_labs$component_id == 2117),]
+    final_dataset$phos[patient_num] <- mean(patient_phos$Value.as.Number, na.rm = TRUE)
+#CALCIUM -- SAMPL TOO LOW 
+   
+#BICARBONATE
+    patient_bicarbonate <- patient_labs[which(patient_labs$component_id == 2109),]
+    final_dataset$bicarbonate[patient_num] <- mean(patient_bicarbonate$Value.as.Number, na.rm = TRUE)
+#ANION GAP
+    patient_aniongap <- patient_labs[which(patient_labs$component_id == 20835),]
+    final_dataset$aniongap[patient_num] <- mean(patient_aniongap$Value.as.Number, na.rm = TRUE)
+#CREATININE
+    patient_creatinine <- patient_labs[which(patient_labs$component_id == 2104),]
+    final_dataset$creatinine[patient_num] <- mean(patient_creatinine$Value.as.Number, na.rm = TRUE)
+#ALBUMIN
+    patient_albumin <- patient_labs[which(patient_labs$component_id == 2121),]
+    final_dataset$albumin[patient_num] <- mean(patient_albumin$Value.as.Number, na.rm = TRUE)
+#HGB 
+    patient_hgb <- patient_labs[which(patient_labs$component_id == 7103),]
+    final_dataset$hgb[patient_num] <- mean(patient_hgb$Value.as.Number, na.rm = TRUE)
+#WBC
+    patient_wbc <- patient_labs[which(patient_labs$component_id == 7100),]
+    final_dataset$wbc[patient_num] <- mean(patient_wbc$Value.as.Number, na.rm = TRUE)
+#PLT
+    patient_plt <- patient_labs[which(patient_labs$component_id == 7111),]
+    final_dataset$plt[patient_num] <- mean(patient_plt$Value.as.Number, na.rm = TRUE)
+#IRON
+    patient_iron <- patient_labs[which(patient_labs$component_id == 2160),]
+    final_dataset$iron[patient_num] <- mean(patient_iron$Value.as.Number, na.rm = TRUE)
+#IRON SATURATION
+    patient_ironsaturation <- patient_labs[which(patient_labs$component_id == 2162),]
+    final_dataset$ironsaturation[patient_num] <- mean(patient_ironsaturation$Value.as.Number, na.rm = TRUE)
+#MCV
+    patient_mcv <- patient_labs[which(patient_labs$component_id == 7105),]
+    final_dataset$mcv[patient_num] <- mean(patient_mcv$Value.as.Number, na.rm = TRUE)
+#RDW
+    patient_rdw <- patient_labs[which(patient_labs$component_id == 7108),]
+    final_dataset$rdw[patient_num] <- mean(patient_rdw$Value.as.Number, na.rm = TRUE)
+#MCHC 
+    patient_mchc <- patient_labs[which(patient_labs$component_id == 7107),]
+    final_dataset$mchc[patient_num] <- mean(patient_mchc$Value.as.Number, na.rm = TRUE)
+#LDL-CHOL (CALC)
+    patient_ldlchol <- patient_labs[which(patient_labs$component_id == 2152),]
+    final_dataset$ldlchol[patient_num] <- mean(patient_ldlchol$Value.as.Number, na.rm = TRUE)
+#TRIGLYCERIDES 
+    patient_triglycerides <- patient_labs[which(patient_labs$component_id == 2155),]
+    final_dataset$triglycerides[patient_num] <- mean(patient_triglycerides$Value.as.Number, na.rm = TRUE)
+#NON-HDL CHOLESTEROL 
+    patient_nonhdlchol <- patient_labs[which(patient_labs$component_id == 20609),]
+    final_dataset$nonhdlchol[patient_num] <- mean(patient_nonhdlchol$Value.as.Number, na.rm = TRUE)
+#HDL 
+    patient_hdl <- patient_labs[which(patient_labs$component_id == 2151),]
+    final_dataset$hdl[patient_num] <- mean(patient_hdl$Value.as.Number, na.rm = TRUE)
+#GLUCOSE 
+    patient_glucose <- patient_labs[which(patient_labs$component_id == 2101),]
+    final_dataset$glucose[patient_num] <- mean(patient_glucose$Value.as.Number, na.rm = TRUE)
+#A1C 
+    patient_a1c <- patient_labs[which(patient_labs$component_id == 2356),]
+    final_dataset$a1c[patient_num] <- mean(patient_a1c$Value.as.Number, na.rm = TRUE)
+#TSH
+    patient_tsh <- patient_labs[which(patient_labs$component_id == 2195),]
+    final_dataset$tsh[patient_num] <- mean(patient_tsh$Value.as.Number, na.rm = TRUE)
+#SED RATE 
+    patient_sedrate <- patient_labs[which(patient_labs$component_id == 7200),]
+    final_dataset$sedrate[patient_num] <- mean(patient_sedrate$Value.as.Number, na.rm = TRUE)
+#LACTATE
+    patient_lactate <- patient_labs[which(patient_labs$component_id == 2175),]
+    final_dataset$lactate[patient_num] <- mean(patient_lactate$Value.as.Number, na.rm = TRUE)
+  }
+
+
+}
+
+```
+
+## Output the Dataset
+
+```{r output}
+# get rid of the patient MRNS
+final_dataset$MRN <- NA
+
+#output the final dataset
+write.csv(final_dataset,"Dec8_Dataset.csv")
+
+```
+
+
+
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
