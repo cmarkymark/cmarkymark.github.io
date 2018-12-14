@@ -15,144 +15,16 @@ library(randomForest)
 options(digits = 2)
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
+## K-Cross Validation With Random Forest Model
 
-## Analytic Plan
-
-We shall conduct a series of multivariate logisitic regression in order to determine factors related to needing glaucoma surgery.  First, we shall split our variables up into 3 categories : 1) vital statistics and hosptalizations, 2) diagnoses, and 3) prescribed medications.  We shall conduct a multivariate regression for each of these variable categories, and finally run a final model combining variables.
-
-## Uploading and Cleaning the Final Dataset
-
-### Loading the Data
-
-```{r dataset}
-
-#df <- read.csv("Dec8_Dataset.csv", header=TRUE)
-
-```
-
-### Exclusion Criteria
-
-So, now we need to exclude people based on certain factors.  There are two primary exclusion criteria, the first being that patients must have been in care in the UC system prior to their surgery (ie we dont want people who just came to UC for surgery, as they will skew the results towards non-significance)
-
-```{r pressure, echo=FALSE}
-
-#clean_data <- data.frame(matrix(nrow=0,ncol=ncol(df)))
-#colnames(clean_data) <- colnames(df)
-
-#surgery_exclude_data <- data.frame(matrix(nrow=0,ncol=ncol(df)))
-#colnames(surgery_exclude_data) <- colnames(df)
-
-#newpatient_exclude_data <- data.frame(matrix(nrow=0,ncol=ncol(df)))
-#colnames(newpatient_exclude_data) <- colnames(df)
-
-#no_vital_data_exclude_data <- data.frame(matrix(nrow=0,ncol=ncol(df)))
-#colnames(no_vital_data_exclude_data) <- colnames(df)
-
-#for(patient_num in 1:nrow(df))
-#{ 
-#  if(!is.na(df$first_surgery_date[patient_num]) && !is.na(df$first_vitals_contact_date[patient_num]))
-#  {
-#    time_test <- difftime(df$first_surgery_date[patient_num], df$first_vitals_contact_date[patient_num], units = "days")
-#    if(time_test > 180)
-#    {
-      
-#      clean_data <- rbind(clean_data, df[patient_num,])
-#    } else {surgery_exclude_data <- rbind(surgery_exclude_data, df[patient_num,])}
-#  } 
-#  else if(is.na(df$first_surgery_date[patient_num]) && !is.na(df$first_vitals_contact_date[patient_num]))
-#  {
-#    time_test2 <- difftime(as.Date("11/01/2018","%m/%d/%Y"), df$first_vitals_contact_date[patient_num], units = "days")
-#    if(time_test2 > 180)
-#    {
-#     clean_data <- rbind(clean_data, df[patient_num,])
-#    } else {
-#      newpatient_exclude_data <- rbind(newpatient_exclude_data, df[patient_num,])
-#    }
-#  } else
-#  {
-#    no_vital_data_exclude_data <- rbind(no_vital_data_exclude_data, df[patient_num,])
-#  }
-#}
-
-
-
-```
-
-### After Exlcusions
-
-We need to decide if we want the exclusion to be 1 year or 6 months
-
-### Imputing Missing Data
-
-```{r impute}
-
-
-## systolic_sd 30 NA
-
-#clean_data$systolic_sd[is.na(clean_data$systolic_sd)] <- mean(clean_data$systolic_sd, na.rm = TRUE)
-
-## diastolic_sd 30 NA
-
-#clean_data$diastolic_sd[is.na(clean_data$diastolic_sd)] <- mean(clean_data$diastolic_sd, na.rm = TRUE)
-
-## BMI mean 4 NA
-
-#clean_data$BMI_mean[is.na(clean_data$BMI_mean)] <- median(clean_data$BMI_mean, na.rm = TRUE)
-# attempts at imputing messed up analyses for some reason
-
-## BMI max 3 NA (median)
-#clean_data$BMI_max[is.na(clean_data$BMI_max)] <- median(clean_data$BMI_max, na.rm = TRUE)
-
-## BMImin 3 NA (median)
-#clean_data$BMI_min[is.na(clean_data$BMI_min)] <- median(clean_data$BMI_min, na.rm = TRUE)
-
-## alcohol use (12 NAs)
-## we will not imput given categorical nature, unclear how this will skew the results
-## if it is not significant in initial analyses we will simply exclude from final analyses 
-
-## smoking status (1 NA)
-```
-
-## Table One
-
-Here is the descriptive statistics, stratified by history of glaucoma surgery.  Rows from this can be taken to present a final descriptive table, if so desired.  Descriptive table might not be overly meaningful tho...
-
-```{r tableone}
-
-
-
-tone_vars = colnames(clean_data)
-tone_vars[12] <- NA
-tone_vars[28] <- NA
-
-tone <- tableone::CreateTableOne(vars = tone_vars, strata = c("any_glaucoma_surgey") ,data =  clean_data)
-
-```
-```{r Bivariate, warning=FALSE}
-bi.final <- data.frame(matrix(nrow = 0, ncol = 3))
-for(i in 3:ncol(clean_data))
-{
-if(i == 11 || i == 12 || i == 22 || i == 23 || i == 24 || i == 25 || i == 26 ||i == 28 || i == 135 || i == 130 || i == 123 || i == 109 || i == 104 || i == 92 || i == 84 ||  i == 78 || i == 54 || i == 53){}
-  else{
-iv <- colnames(clean_data)[i] 
-bi.model <- glm (any_glaucoma_surgey ~ get(iv), data = clean_data, family = binomial(link="logit"))
-#summary(age)
-bi.results <- exp(cbind(OR = coef(bi.model), confint(bi.model)))
-rownames(bi.results)[2] <- colnames(clean_data)[i]
-bi.final <- rbind(bi.final, bi.results)
-}
-}
-
-
-
-bi.signif <- bi.final[which(bi.final$`2.5 %` > 1 | bi.final$`97.5 %`<1),]
-```
-
+So, like with the logistic regression model, we will assign the participants to 5 groups to do 80-20 cross validation and choose the best performing model.  For this doc, we have excluded the code for loading the data and preparing it for analysis.  See the kcrossval.rmd for that code.
 
 ## Creating the five groups for cross-validation
 
-```{r fivegroups}
+Generate a random vector with equal number of 1 - 5, and then assign this vector to the dataframe, in effect, assigning each row randomlly to one of five groups.
 
+```{r fivegroups}
+# this code will generate a random vector for the assignment of groups
 values <- rep(1:5, length.out=391)
 random <- sample(values)
 clean_data$cv_group <- random
@@ -160,6 +32,8 @@ clean_data$cv_group <- random
 ```
 
 ## Defining Our Five Groups
+
+This code shall create dataframes for each of the five test and training sets.
 
 ```{r define groups}
 
@@ -182,6 +56,8 @@ test.five <- clean_data[which(clean_data$cv_group== 5),]
 
 ## Running Cross Val
 
+The following 5 code sections run the five models, as well as plot the AUC plots and return the AUROC values, which shall be utilized to determine the model of best fit.
+
 ### Test 1
 
 ```{r test 1, include=FALSE}
@@ -202,9 +78,13 @@ abline(a=0,b=1,lwd=2,lty=2,col="gray")
 rf.one.auc <- performance(rf.one.pred,"auc")@y.values[[1]]
 
 ```
+### Additional Code Snippet -- Sensitivity, Specificity, Accuracy
 
+The following code snippet is used to identify the best cutpoint and the associated senitivity, specificity, and accuracy of the model.
 
 ```{r get sensitivity and specificity}
+
+# this function identifies the best cut point
 opt.cut = function(perf, pred){
     cut.ind = mapply(FUN=function(x, y, p){
         d = (x - 0)^2 + (y-1)^2
@@ -215,7 +95,7 @@ opt.cut = function(perf, pred){
 }
 print(opt.cut(rf.one.perf, rf.one.pred))
 
-
+# this measures the accuracy across the range of cutpoint and displays an accuracy chart
 acc.perf = performance(rf.one.pred, measure = "acc")
 plot(acc.perf)
 
@@ -309,6 +189,8 @@ rf.five.auc <- performance(rf.five.pred,"auc")@y.values[[1]]
 ```
 ### COMAPRE ROC
 
+The following code outputs the AUROC scores for each model, allowing us the determine the best fitting model.
+
 ```{r roc comapre}
 
 print(rf.one.auc)
@@ -320,6 +202,8 @@ print(rf.five.auc)
 ```
 
 ## Results of Best Model
+
+We want to return the importance scores of the best performing model to understand which variables played the most significant role in this model.
 
 ```{r looking at the best}
 
