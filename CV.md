@@ -28,6 +28,14 @@ Baxter, S., Kuo, T., **Marks, C.**, Ohno-Machado, L., Weinreb, R., Machine learn
 
 ## Conference Procedings
 
+Magaña, V., **Marks, C.**, Baweja, H., Zúñiga, M.L. Cannabis Use and Adherence to Antiretrovirals Among HIV+ Latinos on the U.S.-Mexico Border. Under Review APHA Annual Meeting 2019
+
+**Marks, C.**, Zúñiga, M.L., Putting the “Trauma-Informed” in Tobacco Control. Accepted for oral presentation, Student Research Symposium, San Diego State University. Friday, March 2, 2019. San Diego, California.
+
+Magaña, V., **Marks, C.**, Zúñiga, M.L., Exploratory Study of Stigma as a Predictor of Poor Patient Communication Among Binational HIV-Positive Latinos in the U.S.-Mexico Border Region. Accepted for oral presentation, Student Research Symposium, San Diego State University. Friday, March 2, 2018. San Diego, California.
+
+**Marks, C.**, Bilokha, A., Reed, M., Alcohol-Related Social Media Data as a Proxy for Alcohol Consumption Behaviors in San Diego. Accepted for oral presentation, Student Research Symposium, San Diego State University. Friday, March 2, 2018. San Diego, California.
+
 ## Presentations, Lectures, & Event Participation
 
 **June 2018** International Consortium of Universities for Drug Demand Reduction, Doctoral Student Panel
