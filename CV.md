@@ -24,15 +24,15 @@ Thesis : [Substance Criminalization, Mass Incarceration, & Disenfranchisement](h
 
 ## Manuscripts
 
-**Marks, C.**, Tsuyuki K., Stockman J., Putting the "Trauma-Informed" and "Participatory" in Tobacco Control: A Systematic Review (Under Production for Submission, March 2019)
+**Marks, C.**, Tsuyuki K., Stockman J., Putting the "Trauma-Informed" and "Participatory" in Tobacco Control: A Systematic Review (Under Production for Submission, May 2019)
 
-Baxter, S., Kuo, T., **Marks, C.**, Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records (Submitted for Review @ Opthamology 3/5/19)
+Baxter, S., Kuo, T., **Marks, C.**, Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records (Submitted for Review @ American Journal of Opthamology 4/8/19)
 
 **Marks, C.**, Zúñiga, M.L., Identifying Key Subpopulations Among HIV+ Latinos Receiving Care in San Diego-Tijuana & Assessing CAM Utilization and ARV Adherence: A Latent Class Analysis (Submitted for Review @ Frontiers in Public Health 10/17/18)
 
 ## Conference Procedings
 
-**Marks C.**, Jahangiri, A., Iterative DBSCAN (I-DBSCAN) to Identify Aggressive Driving Behaviors within an Unsupervised Dataset of Real-World Driving (For Submission to IEEE ITSC 2019)
+**Marks C.**, Jahangiri, A.,Machiani, S.G.,Iterative DBSCAN (I-DBSCAN) to Identify Aggressive Driving Behaviors within Unlabeled Real-World Driving Data  Under Review IEEE ITSC 2019 
 
 Magaña, V., **Marks, C.**, Baweja, H., Zúñiga, M.L. Cannabis Use and Adherence to Antiretrovirals Among HIV+ Latinos on the U.S.-Mexico Border. Under Review APHA Annual Meeting 2019
 
