@@ -48,6 +48,12 @@ Magaña, V., **Marks, C.**, Zúñiga, M.L., Exploratory Study of Stigma as a Pre
 
 **March 2019** Guest Lecture: Mediation Analysis in R, SDSU-UCSD IRSU JDP (COURSE NUMBER)
 
+## Peer-Review History
+
+2019 - IEEE-ITSC Conference Proceeding Review
+
+2019 - IJDP Review
+
 ## Current Projects
 
 Assessing the Mediation Effect of Tobacco Use on the Relationship Between ACEs and CHD, COPD, & Cancer
