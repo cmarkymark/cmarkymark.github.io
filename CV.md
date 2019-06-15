@@ -1,6 +1,6 @@
 ## Charles Marks, MPH
 
-I am a doctoral student in the Interdisciplenary Research on Substance Use Joint Doctoral Program at San Diego State University and University of California, San Diego.  I apply a naturalist, critical social lens to addressing issues of health equity.  With a mathematics background, I also seek to apply statistics and modeling methods 
+I am a doctoral student in the Interdisciplinary Research on Substance Use Joint Doctoral Program at San Diego State University and University of California, San Diego.  I apply a naturalist, critical social lens to addressing issues of health equity.  With a mathematics background, I also seek to apply statistics and modeling methods 
 
 ## Education
 
@@ -24,11 +24,9 @@ Thesis : [Substance Criminalization, Mass Incarceration, & Disenfranchisement](h
 
 ## Manuscripts
 
-**Marks, C.**, Tsuyuki K., Stockman J., Putting the "Trauma-Informed" and "Participatory" in Tobacco Control: A Systematic Review (Under Production for Submission, May 2019)
-
 Baxter, S., Kuo, T., **Marks, C.**, Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records (Submitted for Review @ American Journal of Opthamology 4/8/19)
 
-**Marks, C.**, Zúñiga, M.L., Identifying Key Subpopulations Among HIV+ Latinos Receiving Care in San Diego-Tijuana & Assessing CAM Utilization and ARV Adherence: A Latent Class Analysis (Submitted for Review @ Frontiers in Public Health 10/17/18)
+**Marks, C.**, Zúñiga, M.L., Identifying Key Subpopulations Among HIV+ Latinos Receiving Care in San Diego-Tijuana & Assessing CAM Utilization and ARV Adherence: A Latent Class Analysis, DOI: 10.3389/fpubh.2019.00179
 
 ## Conference Procedings
 
