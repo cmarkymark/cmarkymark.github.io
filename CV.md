@@ -24,15 +24,17 @@ Thesis : [Substance Criminalization, Mass Incarceration, & Disenfranchisement](h
 
 ## Manuscripts
 
+**Marks, C.**, Borquez, A., ..., Werb, D., Martin, N., What is the population impact of MAT scale-up on injection drug use initiation? A dynamic modeling analysis (Submission to International Journal of Drug Policy, July 2019)
+
 Baxter, S., Kuo, T., **Marks, C.**, Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records (Submitted for Review @ American Journal of Opthamology 4/8/19)
 
 **Marks, C.**, Zúñiga, M.L., Identifying Key Subpopulations Among HIV+ Latinos Receiving Care in San Diego-Tijuana & Assessing CAM Utilization and ARV Adherence: A Latent Class Analysis, DOI: 10.3389/fpubh.2019.00179
 
 ## Conference Procedings
 
-**Marks C.**, Jahangiri, A.,Machiani, S.G.,Iterative DBSCAN (I-DBSCAN) to Identify Aggressive Driving Behaviors within Unlabeled Real-World Driving Data  Under Review IEEE ITSC 2019 
+**Marks C.**, Jahangiri, A.,Machiani, S.G.,Iterative DBSCAN (I-DBSCAN) to Identify Aggressive Driving Behaviors within Unlabeled Real-World Driving Data IEEE ITSC 2019, New Zealand 
 
-Magaña, V., **Marks, C.**, Baweja, H., Zúñiga, M.L. Cannabis Use and Adherence to Antiretrovirals Among HIV+ Latinos on the U.S.-Mexico Border. Under Review APHA Annual Meeting 2019
+Magaña, V., **Marks, C.**, Baweja, H., Zúñiga, M.L. Cannabis Use and Adherence to Antiretrovirals Among HIV+ Latinos on the U.S.-Mexico Border. APHA Annual Meeting 2019, Philadelphia, PA, USA
 
 **Marks, C.**, Zúñiga, M.L., Putting the “Trauma-Informed” in Tobacco Control. Accepted for oral presentation, Student Research Symposium, San Diego State University. Friday, March 2, 2019. San Diego, California.
 
@@ -56,9 +58,6 @@ Magaña, V., **Marks, C.**, Zúñiga, M.L., Exploratory Study of Stigma as a Pre
 
 Assessing the Mediation Effect of Tobacco Use on the Relationship Between ACEs and CHD, COPD, & Cancer
 Co-Investigators: Dr. Dan Werb
-
-Modeling the Drug Injection Initiation
-Co-Investigators: Drs. Dan Werb, Natasha Martin, Annick Borquez
 
 The Role of Stigma in Inidgenous Substance Use Outcomes: A Systematic Review
 Co-Investigators: Dr. Laramie Smith
