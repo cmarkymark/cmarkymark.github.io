@@ -18,9 +18,9 @@ Thesis : [Substance Criminalization, Mass Incarceration, & Disenfranchisement](h
 
 ### Graduate Assistant: SDSU School of Social Work
 
-### Researcher: PRIMER
+### Researcher: [PRIMER](https://primerstudy.com/our-team/)
 
-### Data Analyst: SAFE-D
+### Data Analyst: [SAFE-D](https://www.vtti.vt.edu/utc/safe-d/index.php/projects/big-data-visualization-and-spatiotemporal-modeling-of-aggressive-driving/)
 
 ## Manuscripts
 
