@@ -38,7 +38,7 @@ Dissertation Committee Members: Natasha Martin, Laramie Smith, Maria Luisa Zunig
 
 Baxter, S., Kuo, T., **Marks, C.**, Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records (Submitted for Review @ American Journal of Opthamology 4/8/19)
 
-**Marks, C.**, Zúñiga, M.L., Identifying Key Subpopulations Among HIV+ Latinos Receiving Care in San Diego-Tijuana & Assessing CAM Utilization and ARV Adherence: A Latent Class Analysis, DOI: 10.3389/fpubh.2019.00179
+**Marks, C.**, Zúñiga, M.L., Identifying Key Subpopulations Among HIV+ Latinos Receiving Care in San Diego-Tijuana & Assessing CAM Utilization and ARV Adherence: A Latent Class Analysis, [DOI: 10.3389/fpubh.2019.00179](https://doi.org/10.3389/fpubh.2019.00179)
 
 ## Conference Procedings
 
