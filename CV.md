@@ -34,9 +34,9 @@ Dissertation Committee Members: TBD
 
 ## Manuscripts
 
-**Marks, C.**, Borquez, A., ..., Werb, D., Martin, N., What is the population impact of MAT scale-up on injection drug use initiation? A dynamic modeling analysis (Submission to International Journal of Drug Policy, July 2019)
+**Marks, C.**, Borquez, A.,Jain, S.,Sun, X.,Strathdee, SA., Garfein, RS., Milloy, M-J, DeBeck, K., Werb, D., Martin, N., What is the population impact of MAT scale-up on injection drug use initiation? A dynamic modeling analysis (Under Review @ PlosMedicine 7/5/19)
 
-Baxter, S., Kuo, T., **Marks, C.**, Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records (Submitted for Review @ American Journal of Opthamology 4/8/19)
+Baxter, S., Kuo, T., **Marks, C.**, Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records (Accepted for Publication @ American Journal of Opthamology 7/11/19)
 
 **Marks, C.**, Zúñiga, M.L., Identifying Key Subpopulations Among HIV+ Latinos Receiving Care in San Diego-Tijuana & Assessing CAM Utilization and ARV Adherence: A Latent Class Analysis, [DOI: 10.3389/fpubh.2019.00179](https://doi.org/10.3389/fpubh.2019.00179)
 
