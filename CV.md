@@ -20,17 +20,25 @@ Current doctoral student in the [Joint Doctoral Program in Interdisciplinary Res
 
 Advisor: Dan Werb
 
-Dissertation Committee Members: TBD
+Dissertation Committee Members: Dan Werb, Natasha Martin, Laramie Smith, Maria Luisa Zuniga, Lianne Urada, Salvador Espinosa
 
 ## Job Appointments
 
 ### Toiyabe Indian Health Project: Family Services Intern
 
-### Graduate Assistant: SDSU School of Social Work
+Worked in the department of Family Services doing data analysis and general program assistance.
 
-### Researcher: [PRIMER](https://primerstudy.com/our-team/)
+### Graduate Assistant: SDSU School of Social Work (2017 - Current)
 
-### Data Analyst: [SAFE-D](https://www.vtti.vt.edu/utc/safe-d/index.php/projects/big-data-visualization-and-spatiotemporal-modeling-of-aggressive-driving/)
+Primary responsibility as teaching assistant in the fall of 2019 and instructor of record in the Spring of 2020.  Course TBD.
+
+### Researcher: [PRIMER](https://primerstudy.com/our-team/) (2017 - Current)
+
+Pre-doctoral researcher on the PRIMER study.  Responsibilities have included data analysis, manuscript production, and general assistance with other project tasks (website editing, grant assistance).
+
+### Data Analyst: [SAFE-D](https://www.vtti.vt.edu/utc/safe-d/index.php/projects/big-data-visualization-and-spatiotemporal-modeling-of-aggressive-driving/) (2018 - 2019)
+
+Project goal is to identify aggressive driving from unlabeled real-world driving data.  Utilized both unsupervised and supervised machine learning techniques to classify and label large datasets and developed tools for visualizing this data.  All analyses conducted in R on top of a PostGreSQL server.
 
 ## Manuscripts
 
