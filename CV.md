@@ -44,7 +44,7 @@ Project goal is to identify aggressive driving from unlabeled real-world driving
 
 **Marks, C.**, Borquez, A.,Jain, S.,Sun, X.,Strathdee, SA., Garfein, RS., Milloy, M-J, DeBeck, K., Werb, D., Martin, N., What is the population impact of MAT scale-up on injection drug use initiation? A dynamic modeling analysis (Under Review @ PlosMedicine 7/5/19)
 
-Baxter, S., **Marks, C.**, Kuo, T., Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records, [DOI: 10.1016/j.ajo.2019.07.005](https://doi.org/10.1016/j.ajo.2019.07.005)
+Baxter, S., **Marks, C.**, Kuo, T., Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records. American Journal of Ophtalmology. 2019 In Press [DOI: 10.1016/j.ajo.2019.07.005](https://doi.org/10.1016/j.ajo.2019.07.005)
 
 **Marks, C.**, Zúñiga, M.L., Identifying Key Subpopulations Among HIV+ Latinos Receiving Care in San Diego-Tijuana & Assessing CAM Utilization and ARV Adherence: A Latent Class Analysis, [DOI: 10.3389/fpubh.2019.00179](https://doi.org/10.3389/fpubh.2019.00179)
 
