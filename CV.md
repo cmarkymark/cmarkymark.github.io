@@ -64,7 +64,7 @@ Magaña, V., **Marks, C.**, Zúñiga, M.L., Exploratory Study of Stigma as a Pre
 
 **June 2018** International Consortium of Universities for Drug Demand Reduction, Doctoral Student Panel
 
-**March 2019** Guest Lecture: Mediation Analysis in R, SDSU-UCSD IRSU JDP (COURSE NUMBER)
+**March 2019** Guest Lecture: Mediation Analysis in R, SDSU-UCSD IRSU JDP (SDSU SW-881)
 
 ## Peer-Review History
 
