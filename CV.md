@@ -60,6 +60,10 @@ Magaña, V., **Marks, C.**, Zúñiga, M.L., Exploratory Study of Stigma as a Pre
 
 **Marks, C.**, Bilokha, A., Reed, M., Alcohol-Related Social Media Data as a Proxy for Alcohol Consumption Behaviors in San Diego. Accepted for oral presentation, Student Research Symposium, San Diego State University. Friday, March 2, 2018. San Diego, California.
 
+## Teaching
+
+### Fall 2019: TA for SW-610 Computer Applications in Social Work Practice @ SDSU
+
 ## Presentations, Lectures, & Event Participation
 
 **June 2018** International Consortium of Universities for Drug Demand Reduction, Doctoral Student Panel
