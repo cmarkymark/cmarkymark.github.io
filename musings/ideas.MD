@@ -2,3 +2,4 @@
 - Toxic patriarchal spaces often treat people (men and women) similarly (generalization), men are trained to be "tough", and the patriarchal system is less about being "pro-male" and more about creating the most subservient and hard-working employees (i.e. fuckin capitalism)
 - Attempting to measure trauma quantitatively lays bear the shortcomings of positivist thinking
   - We understand that when we reduce a continuous datum into a categorical one that we lose information.  The reduction of qualitative information into quantitative information is a similar reduction in resolution.
+  - In fact, we tend to research the easiest things to measure.  That's a huge part of why tobacco is such a huge field.
