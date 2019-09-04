@@ -3,3 +3,4 @@
 - Attempting to measure trauma quantitatively lays bear the shortcomings of positivist thinking
   - We understand that when we reduce a continuous datum into a categorical one that we lose information.  The reduction of qualitative information into quantitative information is a similar reduction in resolution.
   - In fact, we tend to research the easiest things to measure.  That's a huge part of why tobacco is such a huge field.
+  - What we can measure and what we (feel we) can change are often one and the same
