@@ -1,2 +1,3 @@
 - Creating a hypothesis is not always the appropriate response to a research question
 - Toxic patriarchal spaces often treat people (men and women) similarly (generalization), men are trained to be "tough", and the patriarchal system is less about being "pro-male" and more about creating the most subservient and hard-working employees (i.e. fuckin capitalism)
+- Attempting to measure trauma quantitatively lays bear the shortcomings of positivist thinking
