@@ -42,7 +42,7 @@ Project goal is to identify aggressive driving from unlabeled real-world driving
 
 ## Manuscripts
 
-**Marks, C.**, Borquez, A.,Jain, S.,Sun, X.,Strathdee, SA., Garfein, RS., Milloy, M-J, DeBeck, K., Cepeda, J., Werb, D., Martin, N., What is the population impact of MAT scale-up on injection drug use initiation? A dynamic modeling analysis (Under Review @ PlosMedicine 7/5/19)
+**Marks, C.**, Borquez, A.,Jain, S.,Sun, X.,Strathdee, SA., Garfein, RS., Milloy, M-J, DeBeck, K., Cepeda, J., Werb, D., Martin, N., What is the population impact of MAT scale-up on injection drug use initiation? A dynamic modeling analysis (Revision Under Review @ PlosMedicine 9/18/19)
 
 Baxter, S., **Marks, C.**, Kuo, T., Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records. American Journal of Ophtalmology. 2019 In Press [DOI: 10.1016/j.ajo.2019.07.005](https://doi.org/10.1016/j.ajo.2019.07.005)
 
