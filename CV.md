@@ -40,6 +40,10 @@ Pre-doctoral researcher on the PRIMER study.  Responsibilities have included dat
 
 Project goal is to identify aggressive driving from unlabeled real-world driving data.  Utilized both unsupervised and supervised machine learning techniques to classify and label large datasets and developed tools for visualizing this data.  All analyses conducted in R on top of a PostGreSQL server.
 
+### Researcher: Predicting Opioid Overdose (2019 - Current)
+
+Project goal is to develop predictive models aimed at identifying overdose outbreaks in real-time.
+
 ## Manuscripts
 
 **Marks, C.**, Borquez, A.,Jain, S.,Sun, X.,Strathdee, SA., Garfein, RS., Milloy, M-J, DeBeck, K., Cepeda, J., Werb, D., Martin, N., Opioid agonist treatment scale-up and the initiation of injection drug use: a dynamic modeling analysis (Revision Under Review @ PlosMedicine 9/18/19)
