@@ -40,13 +40,8 @@ Pre-doctoral researcher on the PRIMER study.  Responsibilities have included dat
 
 Project goal is to identify aggressive driving from unlabeled real-world driving data.  Utilized both unsupervised and supervised machine learning techniques to classify and label large datasets and developed tools for visualizing this data.  All analyses conducted in R on top of a PostGreSQL server.
 
-### Researcher: Predicting Opioid Overdose (2019 - Current)
-
-Project goal is to develop predictive models aimed at identifying overdose outbreaks in real-time.
 
 ## Manuscripts
-
-**Marks, C.**, Borquez, A.,Jain, S.,Sun, X.,Strathdee, SA., Garfein, RS., Milloy, M-J, DeBeck, K., Cepeda, J., Werb, D., Martin, N., Opioid agonist treatment scale-up and the initiation of injection drug use: a dynamic modeling analysis (Revision Under Review @ PlosMedicine 9/18/19)
 
 Baxter, S., **Marks, C.**, Kuo, T., Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records. American Journal of Ophtalmology. 2019 In Press [DOI: 10.1016/j.ajo.2019.07.005](https://doi.org/10.1016/j.ajo.2019.07.005)
 
@@ -80,15 +75,6 @@ Magaña, V., **Marks, C.**, Zúñiga, M.L., Exploratory Study of Stigma as a Pre
 
 2019 - IJDP Review
 
-## Current Projects
 
-Assessing the Mediation Effect of Tobacco Use on the Relationship Between ACEs and CHD, COPD, & Cancer
-Co-Investigators: Dr. Dan Werb
-
-The Role of Stigma in Inidgenous Substance Use Outcomes: A Systematic Review
-Co-Investigators: Dr. Laramie Smith
-
-Comparing Injection Initiation Risk Factors Across Three North American Contexts
-Co-Investigators: Stephanie Meyer, Dr. Dan Werb
 
 
