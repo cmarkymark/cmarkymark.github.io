@@ -34,11 +34,15 @@ Primary responsibility as teaching assistant in the fall of 2019 and instructor 
 
 ### Researcher: [PRIMER](https://primerstudy.com/our-team/) (2017 - Current)
 
-Pre-doctoral researcher on the PRIMER study.  Responsibilities have included data analysis, manuscript production, and general assistance with other project tasks (website editing, grant assistance).
+Doctoral researcher on the PRIMER study.  Responsibilities have included data analysis, manuscript production, and general assistance with other project tasks (website editing, grant assistance).
 
 ### Data Analyst: [SAFE-D](https://www.vtti.vt.edu/utc/safe-d/index.php/projects/big-data-visualization-and-spatiotemporal-modeling-of-aggressive-driving/) (2018 - 2019)
 
 Project goal is to identify aggressive driving from unlabeled real-world driving data.  Utilized both unsupervised and supervised machine learning techniques to classify and label large datasets and developed tools for visualizing this data.  All analyses conducted in R on top of a PostGreSQL server.
+
+### Researcher: EMERGED (2019 - Current)
+
+Doctoral researcher on EMERGED study. 
 
 
 ## Manuscripts
