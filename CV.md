@@ -47,7 +47,7 @@ Doctoral researcher on EMERGED study.
 
 ## Manuscripts
 
-**Marks, C.**, Botquez, A., Jain, S., Sun, X., Strathdee, S., Garfein, R., Milloy, M-J, DeBeck, K., Cepeda, J., Werb, D., Martin, N., Opioid agonist treatment scale-up and the initiation of injection drug use: a dynamic modeling analysis. 2019 Accepted October PLOS Medicine  
+**Marks, C.**, Botquez, A., Jain, S., Sun, X., Strathdee, S., Garfein, R., Milloy, M-J, DeBeck, K., Cepeda, J., Werb, D., Martin, N., Opioid agonist treatment scale-up and the initiation of injection drug use: a dynamic modeling analysis. PLOS Medicine. 2019 [DOI: 10.1371/journal.pmed.1002973](https://doi.org/10.1371/journal.pmed.1002973)   
 
 Baxter, S., **Marks, C.**, Kuo, T., Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records. American Journal of Ophtalmology. 2019 In Press [DOI: 10.1016/j.ajo.2019.07.005](https://doi.org/10.1016/j.ajo.2019.07.005)
 
