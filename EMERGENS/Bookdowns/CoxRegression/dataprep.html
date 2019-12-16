@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Data Preparation | Predicting Synthetic Opioid Outbreaks</title>
+  <meta name="description" content="This book contains the steps taken to build a predictive model to identify US counties at risk of a synthetic opioid outbreak" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Data Preparation | Predicting Synthetic Opioid Outbreaks" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This book contains the steps taken to build a predictive model to identify US counties at risk of a synthetic opioid outbreak" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Data Preparation | Predicting Synthetic Opioid Outbreaks" />
+  
+  <meta name="twitter:description" content="This book contains the steps taken to build a predictive model to identify US counties at risk of a synthetic opioid outbreak" />
+  
+
+<meta name="author" content="Charles Marks" />
+
+
+<meta name="date" content="2019-12-16" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> What Is In This Book?</a></li>
+<li class="chapter" data-level="2" data-path="dataprep.html"><a href="dataprep.html"><i class="fa fa-check"></i><b>2</b> Data Preparation</a><ul>
+<li class="chapter" data-level="2.1" data-path="dataprep.html"><a href="dataprep.html#cdc-wonder-data"><i class="fa fa-check"></i><b>2.1</b> CDC Wonder Data</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="dataprep.html"><a href="dataprep.html#upload-the-data"><i class="fa fa-check"></i><b>2.1.1</b> Upload the Data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="dataprep.html"><a href="dataprep.html#imputing-missing-data"><i class="fa fa-check"></i><b>2.1.2</b> Imputing Missing Data</a></li>
+<li class="chapter" data-level="2.1.3" data-path="dataprep.html"><a href="dataprep.html#calculating-crude-rates"><i class="fa fa-check"></i><b>2.1.3</b> Calculating Crude Rates</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="dataprep.html"><a href="dataprep.html#american-community-survey"><i class="fa fa-check"></i><b>2.2</b> American Community Survey</a></li>
+<li class="chapter" data-level="2.3" data-path="dataprep.html"><a href="dataprep.html#additional-variables"><i class="fa fa-check"></i><b>2.3</b> Additional Variables</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="dataprep.html"><a href="dataprep.html#hepatitis-c-mortality-cdc-wonder"><i class="fa fa-check"></i><b>2.3.1</b> Hepatitis C Mortality (CDC Wonder)</a></li>
+<li class="chapter" data-level="2.3.2" data-path="dataprep.html"><a href="dataprep.html#urbanicity"><i class="fa fa-check"></i><b>2.3.2</b> Urbanicity</a></li>
+<li class="chapter" data-level="2.3.3" data-path="dataprep.html"><a href="dataprep.html#population-density"><i class="fa fa-check"></i><b>2.3.3</b> Population Density</a></li>
+<li class="chapter" data-level="2.3.4" data-path="dataprep.html"><a href="dataprep.html#police-violence"><i class="fa fa-check"></i><b>2.3.4</b> Police Violence</a></li>
+<li class="chapter" data-level="2.3.5" data-path="dataprep.html"><a href="dataprep.html#road-access-urgent-care-facilities"><i class="fa fa-check"></i><b>2.3.5</b> Road Access &amp; Urgent Care Facilities</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="dataprep.html"><a href="dataprep.html#defining-outcomes"><i class="fa fa-check"></i><b>2.4</b> Defining Outcomes</a></li>
+<li class="chapter" data-level="2.5" data-path="dataprep.html"><a href="dataprep.html#neighboring-county-variables-including-gravity"><i class="fa fa-check"></i><b>2.5</b> Neighboring County Variables (including Gravity)</a></li>
+<li class="chapter" data-level="2.6" data-path="dataprep.html"><a href="dataprep.html#save-dataset"><i class="fa fa-check"></i><b>2.6</b> Save Dataset</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Predicting Synthetic Opioid Outbreaks</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="dataprep" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> Data Preparation</h1>
+<p>Prior to undertaking the analysis, we need to prepare our data. We are looking at annual county-level statistics, so here we will create an observation for each countyXyear for all US counties (n = 3143) and all years between 2010 and 2017. To replicate this code, the data has been made available in the <a href="">following repository</a>.</p>
+<div id="cdc-wonder-data" class="section level2">
+<h2><span class="header-section-number">2.1</span> CDC Wonder Data</h2>
+<div id="upload-the-data" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Upload the Data</h3>
+<p>We will start this process by using data downloaded from the <a href="https://wonder.cdc.gov/mcd.html">CDC Wonder</a> database. Wonder allows users to extract annual, county-level overdose numbers overall and for specific drugs (ie heroin, cocaine, synthetic opioids, et al). Here we upload datasets extracted from the CDC Wonder database to create our initial dataset.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co">## load the data</span></a>
+<a class="sourceLine" id="cb1-2" title="2"></a>
+<a class="sourceLine" id="cb1-3" title="3">synthetic_opioid_data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Synthetic_Opioid_Overdose_By_County_2010-2017.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-4" title="4">heroin_data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Heroin_Overdose_By_County_2010-2017.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-5" title="5">cocaine_data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Cocaine_Overdose_By_County_2010-2017.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-6" title="6">meth_data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Meth_Overdose_By_County_2010-2017.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-7" title="7"></a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="co">## clean the data a little bit</span></a>
+<a class="sourceLine" id="cb1-9" title="9"></a>
+<a class="sourceLine" id="cb1-10" title="10">synthetic_opioid_data<span class="op">$</span>County &lt;-<span class="st"> </span><span class="kw">as.character</span>(synthetic_opioid_data<span class="op">$</span>County)</a>
+<a class="sourceLine" id="cb1-11" title="11">synthetic_opioid_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.character</span>(synthetic_opioid_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb1-12" title="12">synthetic_opioid_data<span class="op">$</span>Deaths[synthetic_opioid_data<span class="op">$</span>Deaths <span class="op">==</span><span class="st"> &quot;Suppressed&quot;</span>] &lt;-<span class="st"> </span><span class="dv">-99</span></a>
+<a class="sourceLine" id="cb1-13" title="13">synthetic_opioid_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.numeric</span>(synthetic_opioid_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb1-14" title="14">synthetic_opioid_data<span class="op">$</span>Population &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>(synthetic_opioid_data<span class="op">$</span>Population))</a>
+<a class="sourceLine" id="cb1-15" title="15"></a>
+<a class="sourceLine" id="cb1-16" title="16">heroin_data<span class="op">$</span>County &lt;-<span class="st"> </span><span class="kw">as.character</span>(heroin_data<span class="op">$</span>County)</a>
+<a class="sourceLine" id="cb1-17" title="17">heroin_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.character</span>(heroin_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb1-18" title="18">heroin_data<span class="op">$</span>Deaths[heroin_data<span class="op">$</span>Deaths <span class="op">==</span><span class="st"> &quot;Suppressed&quot;</span>] &lt;-<span class="st"> </span><span class="dv">-99</span></a>
+<a class="sourceLine" id="cb1-19" title="19">heroin_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.numeric</span>(heroin_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb1-20" title="20">heroin_data<span class="op">$</span>Population &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>(heroin_data<span class="op">$</span>Population))</a>
+<a class="sourceLine" id="cb1-21" title="21"></a>
+<a class="sourceLine" id="cb1-22" title="22">cocaine_data<span class="op">$</span>County &lt;-<span class="st"> </span><span class="kw">as.character</span>(cocaine_data<span class="op">$</span>County)</a>
+<a class="sourceLine" id="cb1-23" title="23">cocaine_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.character</span>(cocaine_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb1-24" title="24">cocaine_data<span class="op">$</span>Deaths[cocaine_data<span class="op">$</span>Deaths <span class="op">==</span><span class="st"> &quot;Suppressed&quot;</span>] &lt;-<span class="st"> </span><span class="dv">-99</span></a>
+<a class="sourceLine" id="cb1-25" title="25">cocaine_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.numeric</span>(cocaine_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb1-26" title="26">cocaine_data<span class="op">$</span>Population &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>(cocaine_data<span class="op">$</span>Population))</a>
+<a class="sourceLine" id="cb1-27" title="27"></a>
+<a class="sourceLine" id="cb1-28" title="28">meth_data<span class="op">$</span>County &lt;-<span class="st"> </span><span class="kw">as.character</span>(meth_data<span class="op">$</span>County)</a>
+<a class="sourceLine" id="cb1-29" title="29">meth_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.character</span>(meth_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb1-30" title="30">meth_data<span class="op">$</span>Deaths[meth_data<span class="op">$</span>Deaths <span class="op">==</span><span class="st"> &quot;Suppressed&quot;</span>] &lt;-<span class="st"> </span><span class="dv">-99</span></a>
+<a class="sourceLine" id="cb1-31" title="31">meth_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.numeric</span>(meth_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb1-32" title="32">meth_data<span class="op">$</span>Population &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>(meth_data<span class="op">$</span>Population))</a>
+<a class="sourceLine" id="cb1-33" title="33"></a>
+<a class="sourceLine" id="cb1-34" title="34"><span class="co">## merge into one file</span></a>
+<a class="sourceLine" id="cb1-35" title="35"></a>
+<a class="sourceLine" id="cb1-36" title="36">data &lt;-<span class="st"> </span>synthetic_opioid_data[<span class="kw">c</span>(<span class="dv">2</span><span class="op">:</span><span class="dv">4</span>,<span class="dv">7</span><span class="op">:</span><span class="dv">6</span>)]</a>
+<a class="sourceLine" id="cb1-37" title="37"></a>
+<a class="sourceLine" id="cb1-38" title="38">data<span class="op">$</span>heroin_deaths &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb1-39" title="39">data<span class="op">$</span>cocaine_deaths &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb1-40" title="40">data<span class="op">$</span>meth_deaths &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb1-41" title="41"></a>
+<a class="sourceLine" id="cb1-42" title="42"><span class="cf">for</span>(county_id <span class="cf">in</span> <span class="kw">unique</span>(data<span class="op">$</span>County.Code)){</a>
+<a class="sourceLine" id="cb1-43" title="43">  <span class="cf">for</span>(year <span class="cf">in</span> <span class="kw">unique</span>(data<span class="op">$</span>Year)){</a>
+<a class="sourceLine" id="cb1-44" title="44">    </a>
+<a class="sourceLine" id="cb1-45" title="45">    data<span class="op">$</span>heroin_deaths[data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year] &lt;-<span class="st"> </span>heroin_data<span class="op">$</span>Deaths[heroin_data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>heroin_data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb1-46" title="46">    data<span class="op">$</span>cocaine_deaths[data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year] &lt;-<span class="st"> </span>cocaine_data<span class="op">$</span>Deaths[cocaine_data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>cocaine_data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb1-47" title="47">    data<span class="op">$</span>meth_deaths[data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year] &lt;-<span class="st"> </span>meth_data<span class="op">$</span>Deaths[meth_data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>meth_data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb1-48" title="48">  }</a>
+<a class="sourceLine" id="cb1-49" title="49">}</a>
+<a class="sourceLine" id="cb1-50" title="50"></a>
+<a class="sourceLine" id="cb1-51" title="51"><span class="kw">colnames</span>(data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;county_name&quot;</span>,<span class="st">&quot;county_code&quot;</span>,<span class="st">&quot;year&quot;</span>,<span class="st">&quot;population&quot;</span>,<span class="st">&quot;synthetic_opioid_deaths&quot;</span>,<span class="st">&quot;heroin_deaths&quot;</span>,<span class="st">&quot;cocaine_deaths&quot;</span>,<span class="st">&quot;meth_deaths&quot;</span>)</a>
+<a class="sourceLine" id="cb1-52" title="52"></a>
+<a class="sourceLine" id="cb1-53" title="53">data &lt;-<span class="st"> </span>data[<span class="op">!</span><span class="kw">is.na</span>(data<span class="op">$</span>population),]</a></code></pre></div>
+</div>
+<div id="imputing-missing-data" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Imputing Missing Data</h3>
+<p>The CDC suppresses any value beneath 10 (ie if a county had 6 overdose deaths in a given year, the CDC just reports suppressed) and so we need to find a way to impute this value. The <a href="https://ajph.aphapublications.org/doi/abs/10.2105/AJPH.2014.301900">CDC recommends</a> a procedure which we update. Essentially for a given state <span class="math inline">\(S\)</span> in a given year <span class="math inline">\(Y\)</span>, we take the number of overdoses <span class="math inline">\(O\)</span> in that year and subtract from it all of the non-suppressed county counts <span class="math inline">\(o_i\)</span>. The remaining number of deaths, <span class="math inline">\(O - \sum{o_i}\)</span> is then distributed to the “Suppressed” counties on a population basis.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co">## load the state data</span></a>
+<a class="sourceLine" id="cb2-2" title="2"></a>
+<a class="sourceLine" id="cb2-3" title="3">synthetic_opioid_data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Synthetic_Opioid_Overdose_By_State_2010-2017.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb2-4" title="4">heroin_data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Heroin_Overdose_By_State_2010-2017.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb2-5" title="5">cocaine_data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Cocaine_Overdose_By_State_2010-2017.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb2-6" title="6">meth_data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Meth_Overdose_By_State_2010-2017.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb2-7" title="7"></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co">## clean the data a little bit</span></a>
+<a class="sourceLine" id="cb2-9" title="9"></a>
+<a class="sourceLine" id="cb2-10" title="10">synthetic_opioid_data<span class="op">$</span>State &lt;-<span class="st"> </span><span class="kw">as.character</span>(synthetic_opioid_data<span class="op">$</span>State)</a>
+<a class="sourceLine" id="cb2-11" title="11">synthetic_opioid_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.character</span>(synthetic_opioid_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb2-12" title="12">synthetic_opioid_data<span class="op">$</span>Deaths[synthetic_opioid_data<span class="op">$</span>Deaths <span class="op">==</span><span class="st"> &quot;Suppressed&quot;</span>] &lt;-<span class="st"> </span><span class="dv">-99</span></a>
+<a class="sourceLine" id="cb2-13" title="13">synthetic_opioid_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.numeric</span>(synthetic_opioid_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb2-14" title="14"></a>
+<a class="sourceLine" id="cb2-15" title="15">heroin_data<span class="op">$</span>State &lt;-<span class="st"> </span><span class="kw">as.character</span>(heroin_data<span class="op">$</span>State)</a>
+<a class="sourceLine" id="cb2-16" title="16">heroin_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.character</span>(heroin_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb2-17" title="17">heroin_data<span class="op">$</span>Deaths[heroin_data<span class="op">$</span>Deaths <span class="op">==</span><span class="st"> &quot;Suppressed&quot;</span>] &lt;-<span class="st"> </span><span class="dv">-99</span></a>
+<a class="sourceLine" id="cb2-18" title="18">heroin_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.numeric</span>(heroin_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb2-19" title="19"></a>
+<a class="sourceLine" id="cb2-20" title="20">cocaine_data<span class="op">$</span>State &lt;-<span class="st"> </span><span class="kw">as.character</span>(cocaine_data<span class="op">$</span>State)</a>
+<a class="sourceLine" id="cb2-21" title="21">cocaine_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.character</span>(cocaine_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb2-22" title="22">cocaine_data<span class="op">$</span>Deaths[cocaine_data<span class="op">$</span>Deaths <span class="op">==</span><span class="st"> &quot;Suppressed&quot;</span>] &lt;-<span class="st"> </span><span class="dv">-99</span></a>
+<a class="sourceLine" id="cb2-23" title="23">cocaine_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.numeric</span>(cocaine_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb2-24" title="24"></a>
+<a class="sourceLine" id="cb2-25" title="25">meth_data<span class="op">$</span>State &lt;-<span class="st"> </span><span class="kw">as.character</span>(meth_data<span class="op">$</span>State)</a>
+<a class="sourceLine" id="cb2-26" title="26">meth_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.character</span>(meth_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb2-27" title="27">meth_data<span class="op">$</span>Deaths[meth_data<span class="op">$</span>Deaths <span class="op">==</span><span class="st"> &quot;Suppressed&quot;</span>] &lt;-<span class="st"> </span><span class="dv">-99</span></a>
+<a class="sourceLine" id="cb2-28" title="28">meth_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.numeric</span>(meth_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb2-29" title="29"></a>
+<a class="sourceLine" id="cb2-30" title="30"><span class="co">## now we need to undertake the imputation procedure</span></a>
+<a class="sourceLine" id="cb2-31" title="31"></a>
+<a class="sourceLine" id="cb2-32" title="32"><span class="cf">for</span>(state_id <span class="cf">in</span> <span class="kw">unique</span>(synthetic_opioid_data<span class="op">$</span>State.Code)){</a>
+<a class="sourceLine" id="cb2-33" title="33">  <span class="cf">for</span>(year <span class="cf">in</span> <span class="kw">unique</span>(synthetic_opioid_data<span class="op">$</span>Year)){</a>
+<a class="sourceLine" id="cb2-34" title="34">    </a>
+<a class="sourceLine" id="cb2-35" title="35">    <span class="co">## we first want to get the total number of deaths for the state</span></a>
+<a class="sourceLine" id="cb2-36" title="36">    total_synthetic_opioid_deaths &lt;-<span class="st"> </span>synthetic_opioid_data<span class="op">$</span>Deaths[synthetic_opioid_data<span class="op">$</span>State.Code <span class="op">==</span><span class="st"> </span>state_id <span class="op">&amp;</span><span class="st"> </span>synthetic_opioid_data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb2-37" title="37">    total_heroin_deaths &lt;-<span class="st"> </span>heroin_data<span class="op">$</span>Deaths[heroin_data<span class="op">$</span>State.Code <span class="op">==</span><span class="st"> </span>state_id <span class="op">&amp;</span><span class="st"> </span>heroin_data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb2-38" title="38">    total_cocaine_deaths &lt;-<span class="st"> </span>cocaine_data<span class="op">$</span>Deaths[cocaine_data<span class="op">$</span>State.Code <span class="op">==</span><span class="st"> </span>state_id <span class="op">&amp;</span><span class="st"> </span>cocaine_data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb2-39" title="39">    total_meth_deaths &lt;-<span class="st"> </span>meth_data<span class="op">$</span>Deaths[meth_data<span class="op">$</span>State.Code <span class="op">==</span><span class="st"> </span>state_id <span class="op">&amp;</span><span class="st"> </span>meth_data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb2-40" title="40">    </a>
+<a class="sourceLine" id="cb2-41" title="41">    <span class="co">## then we want to subtract the number of deaths recorded </span></a>
+<a class="sourceLine" id="cb2-42" title="42">    <span class="co">## and extract the counties that were suppressed</span></a>
+<a class="sourceLine" id="cb2-43" title="43">    </a>
+<a class="sourceLine" id="cb2-44" title="44">    county_data &lt;-<span class="st"> </span>data[data<span class="op">$</span>county_code <span class="op">&gt;=</span><span class="st"> </span>state_id<span class="op">*</span><span class="dv">1000</span> <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>county_code <span class="op">&lt;</span><span class="st"> </span>(state_id<span class="op">*</span><span class="dv">1000</span> <span class="op">+</span><span class="st"> </span><span class="dv">1000</span>) <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year,]</a>
+<a class="sourceLine" id="cb2-45" title="45">    </a>
+<a class="sourceLine" id="cb2-46" title="46">    synthetic_opioid_counties_suppressed &lt;-<span class="st"> </span><span class="kw">c</span>()</a>
+<a class="sourceLine" id="cb2-47" title="47">    heroin_counties_suppressed &lt;-<span class="st"> </span><span class="kw">c</span>()</a>
+<a class="sourceLine" id="cb2-48" title="48">    cocaine_counties_suppressed &lt;-<span class="st"> </span><span class="kw">c</span>()</a>
+<a class="sourceLine" id="cb2-49" title="49">    meth_counties_suppressed &lt;-<span class="st"> </span><span class="kw">c</span>()</a>
+<a class="sourceLine" id="cb2-50" title="50">    </a>
+<a class="sourceLine" id="cb2-51" title="51">    <span class="cf">for</span>(county_id <span class="cf">in</span> <span class="kw">unique</span>(county_data<span class="op">$</span>county_code)){</a>
+<a class="sourceLine" id="cb2-52" title="52">      </a>
+<a class="sourceLine" id="cb2-53" title="53">      <span class="co">## synthetic opioid</span></a>
+<a class="sourceLine" id="cb2-54" title="54">      so_death &lt;-<span class="st"> </span>county_data<span class="op">$</span>synthetic_opioid_deaths[county_data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id]</a>
+<a class="sourceLine" id="cb2-55" title="55">      <span class="cf">if</span>(so_death <span class="op">==</span><span class="st"> </span><span class="dv">-99</span>){</a>
+<a class="sourceLine" id="cb2-56" title="56">        synthetic_opioid_counties_suppressed &lt;-<span class="st"> </span><span class="kw">c</span>(synthetic_opioid_counties_suppressed, county_id)</a>
+<a class="sourceLine" id="cb2-57" title="57">      }<span class="cf">else</span>{</a>
+<a class="sourceLine" id="cb2-58" title="58">        total_synthetic_opioid_deaths &lt;-<span class="st"> </span>total_synthetic_opioid_deaths <span class="op">-</span><span class="st"> </span>so_death</a>
+<a class="sourceLine" id="cb2-59" title="59">      }</a>
+<a class="sourceLine" id="cb2-60" title="60">      </a>
+<a class="sourceLine" id="cb2-61" title="61">      <span class="co">## heroin</span></a>
+<a class="sourceLine" id="cb2-62" title="62">      h_death &lt;-<span class="st"> </span>county_data<span class="op">$</span>heroin_deaths[county_data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id]</a>
+<a class="sourceLine" id="cb2-63" title="63">      <span class="cf">if</span>(h_death <span class="op">==</span><span class="st"> </span><span class="dv">-99</span>){</a>
+<a class="sourceLine" id="cb2-64" title="64">        heroin_counties_suppressed &lt;-<span class="st"> </span><span class="kw">c</span>(heroin_counties_suppressed, county_id)</a>
+<a class="sourceLine" id="cb2-65" title="65">      }<span class="cf">else</span>{</a>
+<a class="sourceLine" id="cb2-66" title="66">        total_heroin_deaths &lt;-<span class="st"> </span>total_heroin_deaths <span class="op">-</span><span class="st"> </span>h_death</a>
+<a class="sourceLine" id="cb2-67" title="67">      }</a>
+<a class="sourceLine" id="cb2-68" title="68">      </a>
+<a class="sourceLine" id="cb2-69" title="69">      <span class="co">## cocaine</span></a>
+<a class="sourceLine" id="cb2-70" title="70">      c_death &lt;-<span class="st"> </span>county_data<span class="op">$</span>cocaine_deaths[county_data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id]</a>
+<a class="sourceLine" id="cb2-71" title="71">      <span class="cf">if</span>(c_death <span class="op">==</span><span class="st"> </span><span class="dv">-99</span>){</a>
+<a class="sourceLine" id="cb2-72" title="72">        cocaine_counties_suppressed &lt;-<span class="st"> </span><span class="kw">c</span>(cocaine_counties_suppressed, county_id)</a>
+<a class="sourceLine" id="cb2-73" title="73">      }<span class="cf">else</span>{</a>
+<a class="sourceLine" id="cb2-74" title="74">        total_cocaine_deaths &lt;-<span class="st"> </span>total_cocaine_deaths <span class="op">-</span><span class="st"> </span>c_death</a>
+<a class="sourceLine" id="cb2-75" title="75">      }</a>
+<a class="sourceLine" id="cb2-76" title="76">      </a>
+<a class="sourceLine" id="cb2-77" title="77">      <span class="co">## meth</span></a>
+<a class="sourceLine" id="cb2-78" title="78">      m_death &lt;-<span class="st"> </span>county_data<span class="op">$</span>meth_deaths[county_data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id]</a>
+<a class="sourceLine" id="cb2-79" title="79">      <span class="cf">if</span>(m_death <span class="op">==</span><span class="st"> </span><span class="dv">-99</span>){</a>
+<a class="sourceLine" id="cb2-80" title="80">        meth_counties_suppressed &lt;-<span class="st"> </span><span class="kw">c</span>(meth_counties_suppressed, county_id)</a>
+<a class="sourceLine" id="cb2-81" title="81">      }<span class="cf">else</span>{</a>
+<a class="sourceLine" id="cb2-82" title="82">        total_meth_deaths &lt;-<span class="st"> </span>total_meth_deaths <span class="op">-</span><span class="st"> </span>m_death</a>
+<a class="sourceLine" id="cb2-83" title="83">      }</a>
+<a class="sourceLine" id="cb2-84" title="84">    }</a>
+<a class="sourceLine" id="cb2-85" title="85">    </a>
+<a class="sourceLine" id="cb2-86" title="86">    </a>
+<a class="sourceLine" id="cb2-87" title="87">    <span class="co">## now we get the population rate of deaths for suppressed counties</span></a>
+<a class="sourceLine" id="cb2-88" title="88">    synthetic_opioid_suppressed_pop &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb2-89" title="89">    heroin_suppressed_pop &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb2-90" title="90">    cocaine_suppressed_pop &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb2-91" title="91">    meth_suppressed_pop &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb2-92" title="92">    </a>
+<a class="sourceLine" id="cb2-93" title="93">    <span class="cf">for</span>(county_id <span class="cf">in</span> synthetic_opioid_counties_suppressed){</a>
+<a class="sourceLine" id="cb2-94" title="94">      synthetic_opioid_suppressed_pop &lt;-<span class="st"> </span>synthetic_opioid_suppressed_pop <span class="op">+</span><span class="st"> </span>county_data<span class="op">$</span>population[county_data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id]</a>
+<a class="sourceLine" id="cb2-95" title="95">    }</a>
+<a class="sourceLine" id="cb2-96" title="96">    <span class="cf">for</span>(county_id <span class="cf">in</span> heroin_counties_suppressed){</a>
+<a class="sourceLine" id="cb2-97" title="97">      heroin_suppressed_pop &lt;-<span class="st"> </span>heroin_suppressed_pop <span class="op">+</span><span class="st"> </span>county_data<span class="op">$</span>population[county_data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id]</a>
+<a class="sourceLine" id="cb2-98" title="98">    }</a>
+<a class="sourceLine" id="cb2-99" title="99">    <span class="cf">for</span>(county_id <span class="cf">in</span> cocaine_counties_suppressed){</a>
+<a class="sourceLine" id="cb2-100" title="100">      cocaine_suppressed_pop &lt;-<span class="st"> </span>cocaine_suppressed_pop <span class="op">+</span><span class="st"> </span>county_data<span class="op">$</span>population[county_data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id]</a>
+<a class="sourceLine" id="cb2-101" title="101">    }</a>
+<a class="sourceLine" id="cb2-102" title="102">    <span class="cf">for</span>(county_id <span class="cf">in</span> meth_counties_suppressed){</a>
+<a class="sourceLine" id="cb2-103" title="103">      meth_suppressed_pop &lt;-<span class="st"> </span>meth_suppressed_pop <span class="op">+</span><span class="st"> </span>county_data<span class="op">$</span>population[county_data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id]</a>
+<a class="sourceLine" id="cb2-104" title="104">    }</a>
+<a class="sourceLine" id="cb2-105" title="105">    </a>
+<a class="sourceLine" id="cb2-106" title="106">    synthetic_opioid_rate &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb2-107" title="107">    <span class="cf">if</span>(synthetic_opioid_suppressed_pop <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb2-108" title="108">      synthetic_opioid_rate &lt;-<span class="st"> </span>total_synthetic_opioid_deaths<span class="op">/</span>synthetic_opioid_suppressed_pop</a>
+<a class="sourceLine" id="cb2-109" title="109">    }</a>
+<a class="sourceLine" id="cb2-110" title="110">    </a>
+<a class="sourceLine" id="cb2-111" title="111">    heroin_rate &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb2-112" title="112">    <span class="cf">if</span>(heroin_suppressed_pop <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb2-113" title="113">      heroin_rate &lt;-<span class="st"> </span>total_heroin_deaths<span class="op">/</span>heroin_suppressed_pop</a>
+<a class="sourceLine" id="cb2-114" title="114">    }</a>
+<a class="sourceLine" id="cb2-115" title="115">    </a>
+<a class="sourceLine" id="cb2-116" title="116">    cocaine_rate &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb2-117" title="117">    <span class="cf">if</span>(cocaine_suppressed_pop <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb2-118" title="118">      cocaine_rate &lt;-<span class="st"> </span>total_cocaine_deaths<span class="op">/</span>cocaine_suppressed_pop</a>
+<a class="sourceLine" id="cb2-119" title="119">    }</a>
+<a class="sourceLine" id="cb2-120" title="120">    </a>
+<a class="sourceLine" id="cb2-121" title="121">    meth_rate &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb2-122" title="122">    <span class="cf">if</span>(meth_suppressed_pop <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb2-123" title="123">      meth_rate &lt;-<span class="st"> </span>total_meth_deaths<span class="op">/</span>meth_suppressed_pop</a>
+<a class="sourceLine" id="cb2-124" title="124">    }</a>
+<a class="sourceLine" id="cb2-125" title="125">    </a>
+<a class="sourceLine" id="cb2-126" title="126">    <span class="cf">if</span>(synthetic_opioid_rate <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>){ synthetic_opioid_rate &lt;-<span class="st"> </span><span class="dv">0</span>}</a>
+<a class="sourceLine" id="cb2-127" title="127">    <span class="cf">if</span>(heroin_rate <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>){ heroin_rate &lt;-<span class="st"> </span><span class="dv">0</span>}</a>
+<a class="sourceLine" id="cb2-128" title="128">    <span class="cf">if</span>(cocaine_rate <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>){ cocaine_rate &lt;-<span class="st"> </span><span class="dv">0</span>}</a>
+<a class="sourceLine" id="cb2-129" title="129">    <span class="cf">if</span>(meth_rate <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>){ meth_rate &lt;-<span class="st"> </span><span class="dv">0</span>}</a>
+<a class="sourceLine" id="cb2-130" title="130">    </a>
+<a class="sourceLine" id="cb2-131" title="131">    <span class="co">## we now want to apply these rates to calculate an imputed value for each suppressed county in the actual data set</span></a>
+<a class="sourceLine" id="cb2-132" title="132">    <span class="co">## note that we know that the crude number does not exceed 9 and thus we use the min() function to cap the value at 9</span></a>
+<a class="sourceLine" id="cb2-133" title="133">    </a>
+<a class="sourceLine" id="cb2-134" title="134">    <span class="cf">for</span>(county_id <span class="cf">in</span> <span class="kw">unique</span>(county_data<span class="op">$</span>county_code)){</a>
+<a class="sourceLine" id="cb2-135" title="135">     </a>
+<a class="sourceLine" id="cb2-136" title="136">      county_pop &lt;-<span class="st"> </span>data<span class="op">$</span>population[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb2-137" title="137">      </a>
+<a class="sourceLine" id="cb2-138" title="138">      <span class="cf">if</span>(data<span class="op">$</span>synthetic_opioid_deaths[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year] <span class="op">==</span><span class="st"> </span><span class="dv">-99</span>){</a>
+<a class="sourceLine" id="cb2-139" title="139">        data<span class="op">$</span>synthetic_opioid_deaths[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year] &lt;-<span class="st"> </span><span class="kw">min</span>(county_pop<span class="op">*</span>synthetic_opioid_rate,<span class="dv">9</span>)</a>
+<a class="sourceLine" id="cb2-140" title="140">      }</a>
+<a class="sourceLine" id="cb2-141" title="141">      </a>
+<a class="sourceLine" id="cb2-142" title="142">      <span class="cf">if</span>(data<span class="op">$</span>heroin_deaths[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year] <span class="op">==</span><span class="st"> </span><span class="dv">-99</span>){</a>
+<a class="sourceLine" id="cb2-143" title="143">        data<span class="op">$</span>heroin_deaths[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year] &lt;-<span class="st"> </span><span class="kw">min</span>(county_pop<span class="op">*</span>heroin_rate,<span class="dv">9</span>)</a>
+<a class="sourceLine" id="cb2-144" title="144">      }</a>
+<a class="sourceLine" id="cb2-145" title="145">      </a>
+<a class="sourceLine" id="cb2-146" title="146">      <span class="cf">if</span>(data<span class="op">$</span>cocaine_deaths[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year] <span class="op">==</span><span class="st"> </span><span class="dv">-99</span>){</a>
+<a class="sourceLine" id="cb2-147" title="147">        data<span class="op">$</span>cocaine_deaths[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year] &lt;-<span class="st"> </span><span class="kw">min</span>(county_pop<span class="op">*</span>cocaine_rate,<span class="dv">9</span>)</a>
+<a class="sourceLine" id="cb2-148" title="148">      }</a>
+<a class="sourceLine" id="cb2-149" title="149">      </a>
+<a class="sourceLine" id="cb2-150" title="150">      <span class="cf">if</span>(data<span class="op">$</span>meth_deaths[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year] <span class="op">==</span><span class="st"> </span><span class="dv">-99</span>){</a>
+<a class="sourceLine" id="cb2-151" title="151">        data<span class="op">$</span>meth_deaths[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year] &lt;-<span class="st"> </span><span class="kw">min</span>(county_pop<span class="op">*</span>meth_rate,<span class="dv">9</span>)</a>
+<a class="sourceLine" id="cb2-152" title="152">      }</a>
+<a class="sourceLine" id="cb2-153" title="153">    }</a>
+<a class="sourceLine" id="cb2-154" title="154">  }</a>
+<a class="sourceLine" id="cb2-155" title="155">}</a></code></pre></div>
+</div>
+<div id="calculating-crude-rates" class="section level3">
+<h3><span class="header-section-number">2.1.3</span> Calculating Crude Rates</h3>
+<p>Now, with the imputed values we are then able to calculate the crude deaths rates of each county (per 100,000 people). This is done by dividing the number of deaths by the size of population and then multiplying this value by 100,000.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">data<span class="op">$</span>synthetic_opioid_crude_death_rate &lt;-<span class="st"> </span><span class="dv">100000</span><span class="op">*</span>(data<span class="op">$</span>synthetic_opioid_deaths<span class="op">/</span>data<span class="op">$</span>population)</a>
+<a class="sourceLine" id="cb3-2" title="2">data<span class="op">$</span>heroin_crude_death_rate &lt;-<span class="st"> </span><span class="dv">100000</span><span class="op">*</span>(data<span class="op">$</span>heroin_deaths<span class="op">/</span>data<span class="op">$</span>population)</a>
+<a class="sourceLine" id="cb3-3" title="3">data<span class="op">$</span>cocaine_crude_death_rate &lt;-<span class="st"> </span><span class="dv">100000</span><span class="op">*</span>(data<span class="op">$</span>cocaine_deaths<span class="op">/</span>data<span class="op">$</span>population)</a>
+<a class="sourceLine" id="cb3-4" title="4">data<span class="op">$</span>meth_crude_death_rate &lt;-<span class="st"> </span><span class="dv">100000</span><span class="op">*</span>(data<span class="op">$</span>meth_deaths<span class="op">/</span>data<span class="op">$</span>population)</a></code></pre></div>
+</div>
+</div>
+<div id="american-community-survey" class="section level2">
+<h2><span class="header-section-number">2.2</span> American Community Survey</h2>
+<p>We would also like to add some demographic data, which is available from the ACS. This dataset has been created by merging multiple ACS data files, the code for which is contained in the appendix.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">ACS &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Data/Updated_ACS_data.csv&quot;</span>, <span class="dt">header =</span> T)</a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(ACS)){</a>
+<a class="sourceLine" id="cb4-4" title="4">  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(ACS)){</a>
+<a class="sourceLine" id="cb4-5" title="5">    <span class="cf">if</span>(<span class="kw">is.na</span>(ACS[i,j])){</a>
+<a class="sourceLine" id="cb4-6" title="6">      ACS[i,j] &lt;-<span class="st"> </span><span class="dv">-999</span></a>
+<a class="sourceLine" id="cb4-7" title="7">    }</a>
+<a class="sourceLine" id="cb4-8" title="8">  }</a>
+<a class="sourceLine" id="cb4-9" title="9">}</a>
+<a class="sourceLine" id="cb4-10" title="10"></a>
+<a class="sourceLine" id="cb4-11" title="11"></a>
+<a class="sourceLine" id="cb4-12" title="12">data<span class="op">$</span>unemployment_rate &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-13" title="13">data<span class="op">$</span>median_household_income &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-14" title="14">data<span class="op">$</span>mean_household_income &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-15" title="15">data<span class="op">$</span>proportion_poverty &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-16" title="16">data<span class="op">$</span>proportion_uninsured &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-17" title="17">data<span class="op">$</span>proportion_homes_no_vehicle &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-18" title="18">data<span class="op">$</span>proportion_homeowners_35perc_income &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-19" title="19">data<span class="op">$</span>proportion_renters_35perc_income &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-20" title="20">data<span class="op">$</span>proportion_white &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-21" title="21">data<span class="op">$</span>proportion_black &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-22" title="22">data<span class="op">$</span>proportion_american_indian_alaska_native &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-23" title="23">data<span class="op">$</span>proportion_asian &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-24" title="24">data<span class="op">$</span>proportion_native_hawaiian_pacific_islander &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-25" title="25">data<span class="op">$</span>proportion_male &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-26" title="26">data<span class="op">$</span>proportion_high_school_or_greater &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-27" title="27">data<span class="op">$</span>proportion_bachelors_or_greater &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-28" title="28"></a>
+<a class="sourceLine" id="cb4-29" title="29"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(data)){</a>
+<a class="sourceLine" id="cb4-30" title="30">  </a>
+<a class="sourceLine" id="cb4-31" title="31"><span class="cf">if</span>(data<span class="op">$</span>county_code[i] <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">2201</span>,<span class="dv">2232</span>,<span class="dv">2280</span>)){} <span class="co">## three Alaskan counties which don&#39;t have data.</span></a>
+<a class="sourceLine" id="cb4-32" title="32">  <span class="cf">else</span>{</a>
+<a class="sourceLine" id="cb4-33" title="33">  </a>
+<a class="sourceLine" id="cb4-34" title="34">data<span class="op">$</span>unemployment_rate[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Unemployment_Rate[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-35" title="35">data<span class="op">$</span>median_household_income[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Median_Household_Income[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-36" title="36">data<span class="op">$</span>mean_household_income[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Mean_Household_Income[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-37" title="37">data<span class="op">$</span>proportion_poverty[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_Poverty[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-38" title="38">data<span class="op">$</span>proportion_uninsured[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_Uninsured[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-39" title="39">data<span class="op">$</span>proportion_homes_no_vehicle[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_Homes_No_Vehicle[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-40" title="40">data<span class="op">$</span>proportion_homeowners_35perc_income[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_Homeowners_35Perc_Income_on_Home[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-41" title="41">data<span class="op">$</span>proportion_renters_35perc_income[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_Renters_35Perc_Income_on_Rent[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-42" title="42">data<span class="op">$</span>proportion_white[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_White[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-43" title="43">data<span class="op">$</span>proportion_black[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_Black[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-44" title="44">data<span class="op">$</span>proportion_american_indian_alaska_native[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_American_Indian_Alaska_Native[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-45" title="45">data<span class="op">$</span>proportion_asian[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_Asian[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-46" title="46">data<span class="op">$</span>proportion_native_hawaiian_pacific_islander[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_Native_Hawaiian_Pacific_Islander[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-47" title="47">data<span class="op">$</span>proportion_male[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_Male[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-48" title="48">data<span class="op">$</span>proportion_high_school_or_greater[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_High_School_or_Greater[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-49" title="49">data<span class="op">$</span>proportion_bachelors_or_greater[i] &lt;-<span class="st"> </span>ACS<span class="op">$</span>Proportion_Bachelors_Degree_or_Greater[ACS<span class="op">$</span>ID <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>county_code[i] <span class="op">&amp;</span><span class="st"> </span>ACS<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>data<span class="op">$</span>year[i]]</a>
+<a class="sourceLine" id="cb4-50" title="50">  }</a>
+<a class="sourceLine" id="cb4-51" title="51">  </a>
+<a class="sourceLine" id="cb4-52" title="52">}</a>
+<a class="sourceLine" id="cb4-53" title="53"></a>
+<a class="sourceLine" id="cb4-54" title="54"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(ACS)){</a>
+<a class="sourceLine" id="cb4-55" title="55">  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(ACS)){</a>
+<a class="sourceLine" id="cb4-56" title="56">    <span class="cf">if</span>(ACS[i,j] <span class="op">==</span><span class="st"> </span><span class="dv">-999</span>){</a>
+<a class="sourceLine" id="cb4-57" title="57">      ACS[i,j] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb4-58" title="58">    }</a>
+<a class="sourceLine" id="cb4-59" title="59">  }</a>
+<a class="sourceLine" id="cb4-60" title="60">}</a></code></pre></div>
+</div>
+<div id="additional-variables" class="section level2">
+<h2><span class="header-section-number">2.3</span> Additional Variables</h2>
+<div id="hepatitis-c-mortality-cdc-wonder" class="section level3">
+<h3><span class="header-section-number">2.3.1</span> Hepatitis C Mortality (CDC Wonder)</h3>
+<p>We used a very similar approach for this variable as for our specific drug use mortalities, using state level estimates to impute suppressed county numbers.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">hepatitis_state_data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Hepatitis_C_Mortality_By_State.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb5-2" title="2">hepatitis_county_data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Hepatitis_C_Mortality_By_County.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb5-3" title="3"></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co">## clean the data a little bit</span></a>
+<a class="sourceLine" id="cb5-5" title="5"></a>
+<a class="sourceLine" id="cb5-6" title="6">hepatitis_state_data<span class="op">$</span>State &lt;-<span class="st"> </span><span class="kw">as.character</span>(hepatitis_state_data<span class="op">$</span>State)</a>
+<a class="sourceLine" id="cb5-7" title="7">hepatitis_state_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.character</span>(hepatitis_state_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb5-8" title="8">hepatitis_state_data<span class="op">$</span>Deaths[hepatitis_state_data<span class="op">$</span>Deaths <span class="op">==</span><span class="st"> &quot;Suppressed&quot;</span>] &lt;-<span class="st"> </span><span class="dv">-99</span></a>
+<a class="sourceLine" id="cb5-9" title="9">hepatitis_state_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.numeric</span>(hepatitis_state_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb5-10" title="10"></a>
+<a class="sourceLine" id="cb5-11" title="11">hepatitis_county_data<span class="op">$</span>County &lt;-<span class="st"> </span><span class="kw">as.character</span>(hepatitis_county_data<span class="op">$</span>County)</a>
+<a class="sourceLine" id="cb5-12" title="12">hepatitis_county_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.character</span>(hepatitis_county_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb5-13" title="13">hepatitis_county_data<span class="op">$</span>Deaths[hepatitis_county_data<span class="op">$</span>Deaths <span class="op">==</span><span class="st"> &quot;Suppressed&quot;</span>] &lt;-<span class="st"> </span><span class="dv">-99</span></a>
+<a class="sourceLine" id="cb5-14" title="14">hepatitis_county_data<span class="op">$</span>Deaths &lt;-<span class="st"> </span>(<span class="kw">as.numeric</span>(hepatitis_county_data<span class="op">$</span>Deaths))</a>
+<a class="sourceLine" id="cb5-15" title="15">hepatitis_county_data<span class="op">$</span>Population &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>(hepatitis_county_data<span class="op">$</span>Population))</a>
+<a class="sourceLine" id="cb5-16" title="16"></a>
+<a class="sourceLine" id="cb5-17" title="17"><span class="co">## now we need to undertake the imputation procedure</span></a>
+<a class="sourceLine" id="cb5-18" title="18"></a>
+<a class="sourceLine" id="cb5-19" title="19"><span class="cf">for</span>(state_id <span class="cf">in</span> <span class="kw">unique</span>(hepatitis_state_data<span class="op">$</span>State.Code)){</a>
+<a class="sourceLine" id="cb5-20" title="20">  <span class="cf">for</span>(year <span class="cf">in</span> <span class="kw">unique</span>(hepatitis_state_data<span class="op">$</span>Year)){</a>
+<a class="sourceLine" id="cb5-21" title="21">    </a>
+<a class="sourceLine" id="cb5-22" title="22">    <span class="co">## we first want to get the total number of deaths for the state</span></a>
+<a class="sourceLine" id="cb5-23" title="23">    total_hepatitis_deaths &lt;-<span class="st"> </span>hepatitis_state_data<span class="op">$</span>Deaths[hepatitis_state_data<span class="op">$</span>State.Code <span class="op">==</span><span class="st"> </span>state_id <span class="op">&amp;</span><span class="st"> </span>hepatitis_state_data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb5-24" title="24">    </a>
+<a class="sourceLine" id="cb5-25" title="25">    <span class="co">## then we want to subtract the number of deaths recorded </span></a>
+<a class="sourceLine" id="cb5-26" title="26">    <span class="co">## and extract the counties that were suppressed</span></a>
+<a class="sourceLine" id="cb5-27" title="27">    </a>
+<a class="sourceLine" id="cb5-28" title="28">    county_data &lt;-<span class="st"> </span>hepatitis_county_data[hepatitis_county_data<span class="op">$</span>County.Code <span class="op">&gt;=</span><span class="st"> </span>state_id<span class="op">*</span><span class="dv">1000</span> <span class="op">&amp;</span><span class="st"> </span>hepatitis_county_data<span class="op">$</span>County.Code <span class="op">&lt;</span><span class="st"> </span>(state_id<span class="op">*</span><span class="dv">1000</span> <span class="op">+</span><span class="st"> </span><span class="dv">1000</span>) <span class="op">&amp;</span><span class="st"> </span>hepatitis_county_data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year,]</a>
+<a class="sourceLine" id="cb5-29" title="29">    </a>
+<a class="sourceLine" id="cb5-30" title="30">    counties_suppressed &lt;-<span class="st"> </span><span class="kw">c</span>()</a>
+<a class="sourceLine" id="cb5-31" title="31"></a>
+<a class="sourceLine" id="cb5-32" title="32">    </a>
+<a class="sourceLine" id="cb5-33" title="33">    <span class="cf">for</span>(county_id <span class="cf">in</span> <span class="kw">unique</span>(county_data<span class="op">$</span>County.Code)){</a>
+<a class="sourceLine" id="cb5-34" title="34">      </a>
+<a class="sourceLine" id="cb5-35" title="35">      death &lt;-<span class="st"> </span>county_data<span class="op">$</span>Deaths[county_data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county_id]</a>
+<a class="sourceLine" id="cb5-36" title="36">      <span class="cf">if</span>(<span class="kw">is.na</span>(death)){</a>
+<a class="sourceLine" id="cb5-37" title="37">        </a>
+<a class="sourceLine" id="cb5-38" title="38">      }</a>
+<a class="sourceLine" id="cb5-39" title="39">      <span class="cf">else</span> <span class="cf">if</span>(death <span class="op">==</span><span class="st"> </span><span class="dv">-99</span>){</a>
+<a class="sourceLine" id="cb5-40" title="40">        counties_suppressed &lt;-<span class="st"> </span><span class="kw">c</span>(counties_suppressed, county_id)</a>
+<a class="sourceLine" id="cb5-41" title="41">      }<span class="cf">else</span>{</a>
+<a class="sourceLine" id="cb5-42" title="42">        total_hepatitis_deaths &lt;-<span class="st"> </span>total_hepatitis_deaths <span class="op">-</span><span class="st"> </span>death</a>
+<a class="sourceLine" id="cb5-43" title="43">      }</a>
+<a class="sourceLine" id="cb5-44" title="44">    }</a>
+<a class="sourceLine" id="cb5-45" title="45">    </a>
+<a class="sourceLine" id="cb5-46" title="46">    </a>
+<a class="sourceLine" id="cb5-47" title="47">    <span class="co">## now we get the population rate of deaths for suppressed counties</span></a>
+<a class="sourceLine" id="cb5-48" title="48">    suppressed_pop &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb5-49" title="49">    </a>
+<a class="sourceLine" id="cb5-50" title="50">    <span class="cf">for</span>(county_id <span class="cf">in</span> counties_suppressed){</a>
+<a class="sourceLine" id="cb5-51" title="51">      suppressed_pop &lt;-<span class="st"> </span>suppressed_pop <span class="op">+</span><span class="st"> </span>county_data<span class="op">$</span>Population[county_data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county_id]</a>
+<a class="sourceLine" id="cb5-52" title="52">    }</a>
+<a class="sourceLine" id="cb5-53" title="53">    </a>
+<a class="sourceLine" id="cb5-54" title="54">    death_rate &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb5-55" title="55">    <span class="cf">if</span>(suppressed_pop <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb5-56" title="56">      death_rate &lt;-<span class="st"> </span>total_hepatitis_deaths<span class="op">/</span>suppressed_pop</a>
+<a class="sourceLine" id="cb5-57" title="57">    }</a>
+<a class="sourceLine" id="cb5-58" title="58">    </a>
+<a class="sourceLine" id="cb5-59" title="59">    <span class="cf">if</span>(death_rate <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>){ death_rate &lt;-<span class="st"> </span><span class="dv">0</span>}</a>
+<a class="sourceLine" id="cb5-60" title="60">    </a>
+<a class="sourceLine" id="cb5-61" title="61">    </a>
+<a class="sourceLine" id="cb5-62" title="62">    <span class="co">## we now want to apply these rates to calculate an imputed value for each suppressed county in the actual data set</span></a>
+<a class="sourceLine" id="cb5-63" title="63">    <span class="co">## note that we know that the crude number does not exceed 9 and thus we use the min() function to cap the value at 9</span></a>
+<a class="sourceLine" id="cb5-64" title="64">    </a>
+<a class="sourceLine" id="cb5-65" title="65">    <span class="cf">for</span>(county_id <span class="cf">in</span> <span class="kw">unique</span>(county_data<span class="op">$</span>County.Code)){</a>
+<a class="sourceLine" id="cb5-66" title="66">     </a>
+<a class="sourceLine" id="cb5-67" title="67">      county_pop &lt;-<span class="st"> </span>county_data<span class="op">$</span>Population[county_data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county_id]</a>
+<a class="sourceLine" id="cb5-68" title="68">      </a>
+<a class="sourceLine" id="cb5-69" title="69">      <span class="cf">if</span>(<span class="kw">is.na</span>(county_data<span class="op">$</span>Deaths[county_data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county_id])){</a>
+<a class="sourceLine" id="cb5-70" title="70">        </a>
+<a class="sourceLine" id="cb5-71" title="71">      }<span class="cf">else</span> <span class="cf">if</span>(county_data<span class="op">$</span>Deaths[county_data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county_id] <span class="op">==</span><span class="st"> </span><span class="dv">-99</span>){</a>
+<a class="sourceLine" id="cb5-72" title="72">        hepatitis_county_data<span class="op">$</span>Deaths[hepatitis_county_data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county_id <span class="op">&amp;</span><span class="st"> </span>hepatitis_county_data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year] &lt;-<span class="st"> </span><span class="kw">min</span>(county_pop<span class="op">*</span>death_rate,<span class="dv">9</span>)</a>
+<a class="sourceLine" id="cb5-73" title="73">      }</a>
+<a class="sourceLine" id="cb5-74" title="74">    }</a>
+<a class="sourceLine" id="cb5-75" title="75">  }</a>
+<a class="sourceLine" id="cb5-76" title="76">}</a>
+<a class="sourceLine" id="cb5-77" title="77"></a>
+<a class="sourceLine" id="cb5-78" title="78"><span class="co">## so now we want to merge this data into our final dataset</span></a>
+<a class="sourceLine" id="cb5-79" title="79"><span class="co">## note that we need to convert this into an actual rate when we do this</span></a>
+<a class="sourceLine" id="cb5-80" title="80"></a>
+<a class="sourceLine" id="cb5-81" title="81">data<span class="op">$</span>hep_c_mortality_rate &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb5-82" title="82"></a>
+<a class="sourceLine" id="cb5-83" title="83"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(data)){</a>
+<a class="sourceLine" id="cb5-84" title="84">  </a>
+<a class="sourceLine" id="cb5-85" title="85">  year &lt;-<span class="st"> </span>data<span class="op">$</span>year[i]</a>
+<a class="sourceLine" id="cb5-86" title="86">  county &lt;-<span class="st"> </span>data<span class="op">$</span>county_code[i]</a>
+<a class="sourceLine" id="cb5-87" title="87">  </a>
+<a class="sourceLine" id="cb5-88" title="88">  numbers_of_deaths &lt;-<span class="st"> </span>hepatitis_county_data<span class="op">$</span>Deaths[hepatitis_county_data<span class="op">$</span>County.Code <span class="op">==</span><span class="st"> </span>county <span class="op">&amp;</span><span class="st"> </span>hepatitis_county_data<span class="op">$</span>Year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb5-89" title="89">  population &lt;-<span class="st"> </span>data<span class="op">$</span>population[i]</a>
+<a class="sourceLine" id="cb5-90" title="90">  </a>
+<a class="sourceLine" id="cb5-91" title="91">  hepatitis_mortality_rate &lt;-<span class="st"> </span><span class="dv">100000</span><span class="op">*</span>(numbers_of_deaths<span class="op">/</span>population)</a>
+<a class="sourceLine" id="cb5-92" title="92">  </a>
+<a class="sourceLine" id="cb5-93" title="93">  data<span class="op">$</span>hep_c_mortality_rate[i] &lt;-<span class="st"> </span>hepatitis_mortality_rate</a>
+<a class="sourceLine" id="cb5-94" title="94">  </a>
+<a class="sourceLine" id="cb5-95" title="95">}</a></code></pre></div>
+</div>
+<div id="urbanicity" class="section level3">
+<h3><span class="header-section-number">2.3.2</span> Urbanicity</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">urbanicity &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Data/Urbanicity.csv&quot;</span>, <span class="dt">header =</span> T)</a>
+<a class="sourceLine" id="cb6-2" title="2"></a>
+<a class="sourceLine" id="cb6-3" title="3">data<span class="op">$</span>urbanicity &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="cf">for</span>(id <span class="cf">in</span> <span class="kw">unique</span>(data<span class="op">$</span>county_code)){</a>
+<a class="sourceLine" id="cb6-5" title="5">  </a>
+<a class="sourceLine" id="cb6-6" title="6">  urban &lt;-<span class="st"> </span>urbanicity<span class="op">$</span>X2013.code[urbanicity<span class="op">$</span>ï..FIPS.code <span class="op">==</span><span class="st"> </span>id]</a>
+<a class="sourceLine" id="cb6-7" title="7">  data<span class="op">$</span>urbanicity[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>id] &lt;-<span class="st"> </span>urban</a>
+<a class="sourceLine" id="cb6-8" title="8">  </a>
+<a class="sourceLine" id="cb6-9" title="9">}</a></code></pre></div>
+</div>
+<div id="population-density" class="section level3">
+<h3><span class="header-section-number">2.3.3</span> Population Density</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">land_area &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Data/Land_Area.csv&quot;</span>, <span class="dt">header =</span> T)</a>
+<a class="sourceLine" id="cb7-2" title="2"></a>
+<a class="sourceLine" id="cb7-3" title="3">data<span class="op">$</span>population_density &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="cf">for</span>(id <span class="cf">in</span> <span class="kw">unique</span>(data<span class="op">$</span>county_code)){</a>
+<a class="sourceLine" id="cb7-5" title="5">  </a>
+<a class="sourceLine" id="cb7-6" title="6">  <span class="cf">if</span>(id <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">2201</span>,<span class="dv">2232</span>,<span class="dv">2280</span>)){} <span class="co">## three Alaskan counties which don&#39;t have data.</span></a>
+<a class="sourceLine" id="cb7-7" title="7">  <span class="cf">else</span>{</a>
+<a class="sourceLine" id="cb7-8" title="8">    </a>
+<a class="sourceLine" id="cb7-9" title="9">    la &lt;-<span class="st"> </span>land_area<span class="op">$</span>Land_Area[land_area<span class="op">$</span>FIPS <span class="op">==</span><span class="st"> </span>id]</a>
+<a class="sourceLine" id="cb7-10" title="10">    </a>
+<a class="sourceLine" id="cb7-11" title="11">    </a>
+<a class="sourceLine" id="cb7-12" title="12">    </a>
+<a class="sourceLine" id="cb7-13" title="13">    subset &lt;-<span class="st"> </span>data[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>id,]</a>
+<a class="sourceLine" id="cb7-14" title="14">    <span class="cf">for</span>(year <span class="cf">in</span> <span class="kw">unique</span>(subset<span class="op">$</span>year)){</a>
+<a class="sourceLine" id="cb7-15" title="15">      </a>
+<a class="sourceLine" id="cb7-16" title="16">      population &lt;-<span class="st"> </span>subset<span class="op">$</span>population[subset<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb7-17" title="17">      pop_density &lt;-<span class="st"> </span>population<span class="op">/</span>la</a>
+<a class="sourceLine" id="cb7-18" title="18">      data<span class="op">$</span>population_density[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>id <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year] &lt;-<span class="st"> </span>pop_density</a>
+<a class="sourceLine" id="cb7-19" title="19">      </a>
+<a class="sourceLine" id="cb7-20" title="20">    }</a>
+<a class="sourceLine" id="cb7-21" title="21">  }</a>
+<a class="sourceLine" id="cb7-22" title="22">  </a>
+<a class="sourceLine" id="cb7-23" title="23">  </a>
+<a class="sourceLine" id="cb7-24" title="24">}</a>
+<a class="sourceLine" id="cb7-25" title="25"></a>
+<a class="sourceLine" id="cb7-26" title="26">data<span class="op">$</span>log_population_density &lt;-<span class="st"> </span><span class="kw">log</span>(data<span class="op">$</span>population_density)</a></code></pre></div>
+</div>
+<div id="police-violence" class="section level3">
+<h3><span class="header-section-number">2.3.4</span> Police Violence</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">police_violence &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Data/annual_police_violence_by_county.csv&quot;</span>, <span class="dt">header =</span> T)</a>
+<a class="sourceLine" id="cb8-2" title="2"></a>
+<a class="sourceLine" id="cb8-3" title="3">data<span class="op">$</span>police_violence &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb8-4" title="4"></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(data)){</a>
+<a class="sourceLine" id="cb8-6" title="6">  </a>
+<a class="sourceLine" id="cb8-7" title="7">  year &lt;-<span class="st"> </span>data<span class="op">$</span>year[i]</a>
+<a class="sourceLine" id="cb8-8" title="8">  fips &lt;-<span class="st"> </span>data<span class="op">$</span>county_code[i]</a>
+<a class="sourceLine" id="cb8-9" title="9">  </a>
+<a class="sourceLine" id="cb8-10" title="10">  <span class="cf">if</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">2010</span>){</a>
+<a class="sourceLine" id="cb8-11" title="11">    </a>
+<a class="sourceLine" id="cb8-12" title="12">    killings &lt;-<span class="st"> </span>police_violence<span class="op">$</span>deaths_<span class="dv">2010</span>[police_violence<span class="op">$</span>county_fips <span class="op">==</span><span class="st"> </span>fips]</a>
+<a class="sourceLine" id="cb8-13" title="13">    </a>
+<a class="sourceLine" id="cb8-14" title="14">    <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-15" title="15">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>T    </a>
+<a class="sourceLine" id="cb8-16" title="16">    }<span class="cf">else</span> <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">==</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-17" title="17">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>F </a>
+<a class="sourceLine" id="cb8-18" title="18">    }</a>
+<a class="sourceLine" id="cb8-19" title="19">    </a>
+<a class="sourceLine" id="cb8-20" title="20">  }<span class="cf">else</span> <span class="cf">if</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">2011</span>){</a>
+<a class="sourceLine" id="cb8-21" title="21">    killings &lt;-<span class="st"> </span>police_violence<span class="op">$</span>deaths_<span class="dv">2011</span>[police_violence<span class="op">$</span>county_fips <span class="op">==</span><span class="st"> </span>fips]</a>
+<a class="sourceLine" id="cb8-22" title="22">    </a>
+<a class="sourceLine" id="cb8-23" title="23">    <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-24" title="24">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>T    </a>
+<a class="sourceLine" id="cb8-25" title="25">    }<span class="cf">else</span> <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">==</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-26" title="26">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>F </a>
+<a class="sourceLine" id="cb8-27" title="27">    }</a>
+<a class="sourceLine" id="cb8-28" title="28">  }<span class="cf">else</span> <span class="cf">if</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">2012</span>){</a>
+<a class="sourceLine" id="cb8-29" title="29">    killings &lt;-<span class="st"> </span>police_violence<span class="op">$</span>deaths_<span class="dv">2012</span>[police_violence<span class="op">$</span>county_fips <span class="op">==</span><span class="st"> </span>fips]</a>
+<a class="sourceLine" id="cb8-30" title="30">    </a>
+<a class="sourceLine" id="cb8-31" title="31">    <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-32" title="32">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>T    </a>
+<a class="sourceLine" id="cb8-33" title="33">    }<span class="cf">else</span> <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">==</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-34" title="34">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>F </a>
+<a class="sourceLine" id="cb8-35" title="35">    }</a>
+<a class="sourceLine" id="cb8-36" title="36">  }<span class="cf">else</span> <span class="cf">if</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">2013</span>){</a>
+<a class="sourceLine" id="cb8-37" title="37">    killings &lt;-<span class="st"> </span>police_violence<span class="op">$</span>deaths_<span class="dv">2013</span>[police_violence<span class="op">$</span>county_fips <span class="op">==</span><span class="st"> </span>fips]</a>
+<a class="sourceLine" id="cb8-38" title="38">    </a>
+<a class="sourceLine" id="cb8-39" title="39">    <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-40" title="40">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>T    </a>
+<a class="sourceLine" id="cb8-41" title="41">    }<span class="cf">else</span> <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">==</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-42" title="42">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>F </a>
+<a class="sourceLine" id="cb8-43" title="43">    }</a>
+<a class="sourceLine" id="cb8-44" title="44">  }<span class="cf">else</span> <span class="cf">if</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">2014</span>){</a>
+<a class="sourceLine" id="cb8-45" title="45">    killings &lt;-<span class="st"> </span>police_violence<span class="op">$</span>deaths_<span class="dv">2014</span>[police_violence<span class="op">$</span>county_fips <span class="op">==</span><span class="st"> </span>fips]</a>
+<a class="sourceLine" id="cb8-46" title="46">    </a>
+<a class="sourceLine" id="cb8-47" title="47">    <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-48" title="48">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>T    </a>
+<a class="sourceLine" id="cb8-49" title="49">    }<span class="cf">else</span> <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">==</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-50" title="50">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>F </a>
+<a class="sourceLine" id="cb8-51" title="51">    }</a>
+<a class="sourceLine" id="cb8-52" title="52">  }<span class="cf">else</span> <span class="cf">if</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">2015</span>){</a>
+<a class="sourceLine" id="cb8-53" title="53">    killings &lt;-<span class="st"> </span>police_violence<span class="op">$</span>deaths_<span class="dv">2015</span>[police_violence<span class="op">$</span>county_fips <span class="op">==</span><span class="st"> </span>fips]</a>
+<a class="sourceLine" id="cb8-54" title="54">    </a>
+<a class="sourceLine" id="cb8-55" title="55">    <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-56" title="56">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>T    </a>
+<a class="sourceLine" id="cb8-57" title="57">    }<span class="cf">else</span> <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">==</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-58" title="58">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>F </a>
+<a class="sourceLine" id="cb8-59" title="59">    }</a>
+<a class="sourceLine" id="cb8-60" title="60">  }<span class="cf">else</span> <span class="cf">if</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">2016</span>){</a>
+<a class="sourceLine" id="cb8-61" title="61">    killings &lt;-<span class="st"> </span>police_violence<span class="op">$</span>deaths_<span class="dv">2016</span>[police_violence<span class="op">$</span>county_fips <span class="op">==</span><span class="st"> </span>fips]</a>
+<a class="sourceLine" id="cb8-62" title="62">    </a>
+<a class="sourceLine" id="cb8-63" title="63">    <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-64" title="64">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>T    </a>
+<a class="sourceLine" id="cb8-65" title="65">    }<span class="cf">else</span> <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">==</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-66" title="66">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>F </a>
+<a class="sourceLine" id="cb8-67" title="67">    }</a>
+<a class="sourceLine" id="cb8-68" title="68">  }<span class="cf">else</span> <span class="cf">if</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">2017</span>){</a>
+<a class="sourceLine" id="cb8-69" title="69">    killings &lt;-<span class="st"> </span>police_violence<span class="op">$</span>deaths_<span class="dv">2017</span>[police_violence<span class="op">$</span>county_fips <span class="op">==</span><span class="st"> </span>fips]</a>
+<a class="sourceLine" id="cb8-70" title="70">    </a>
+<a class="sourceLine" id="cb8-71" title="71">    <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-72" title="72">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>T    </a>
+<a class="sourceLine" id="cb8-73" title="73">    }<span class="cf">else</span> <span class="cf">if</span>(<span class="kw">length</span>(killings) <span class="op">&gt;</span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>killings <span class="op">==</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb8-74" title="74">      data<span class="op">$</span>police_violence[i] &lt;-<span class="st"> </span>F </a>
+<a class="sourceLine" id="cb8-75" title="75">    }</a>
+<a class="sourceLine" id="cb8-76" title="76">  }</a>
+<a class="sourceLine" id="cb8-77" title="77">}</a></code></pre></div>
+</div>
+<div id="road-access-urgent-care-facilities" class="section level3">
+<h3><span class="header-section-number">2.3.5</span> Road Access &amp; Urgent Care Facilities</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">hospitals &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Data/roads_urgent_care.csv&quot;</span>, <span class="dt">header =</span> T)</a>
+<a class="sourceLine" id="cb9-2" title="2"></a>
+<a class="sourceLine" id="cb9-3" title="3">data<span class="op">$</span>road_access &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb9-4" title="4">data<span class="op">$</span>urgent_care &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb9-5" title="5"></a>
+<a class="sourceLine" id="cb9-6" title="6"><span class="cf">for</span>(id <span class="cf">in</span> <span class="kw">unique</span>(data<span class="op">$</span>county_code)){</a>
+<a class="sourceLine" id="cb9-7" title="7">  </a>
+<a class="sourceLine" id="cb9-8" title="8">  road_access &lt;-<span class="st"> </span>hospitals<span class="op">$</span>roads_access[hospitals<span class="op">$</span>GEOID <span class="op">==</span><span class="st"> </span>id]</a>
+<a class="sourceLine" id="cb9-9" title="9">  urgent_care &lt;-<span class="st"> </span>hospitals<span class="op">$</span>urgent_care[hospitals<span class="op">$</span>GEOID <span class="op">==</span><span class="st"> </span>id]</a>
+<a class="sourceLine" id="cb9-10" title="10">  </a>
+<a class="sourceLine" id="cb9-11" title="11">  <span class="cf">if</span>(<span class="kw">length</span>(road_access) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>road_access <span class="op">==</span><span class="st"> &quot;yes&quot;</span>){</a>
+<a class="sourceLine" id="cb9-12" title="12">    road_access &lt;-<span class="st"> </span>T</a>
+<a class="sourceLine" id="cb9-13" title="13">  } <span class="cf">else</span>{ road_access&lt;-<span class="st"> </span>F}</a>
+<a class="sourceLine" id="cb9-14" title="14">  </a>
+<a class="sourceLine" id="cb9-15" title="15">  <span class="cf">if</span>(<span class="kw">length</span>(urgent_care) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;&amp;</span><span class="st"> </span>urgent_care <span class="op">==</span><span class="st"> &quot;yes&quot;</span>){</a>
+<a class="sourceLine" id="cb9-16" title="16">    urgent_care &lt;-<span class="st"> </span>T</a>
+<a class="sourceLine" id="cb9-17" title="17">  }<span class="cf">else</span>{urgent_care &lt;-<span class="st"> </span>F}</a>
+<a class="sourceLine" id="cb9-18" title="18">  </a>
+<a class="sourceLine" id="cb9-19" title="19">  data<span class="op">$</span>road_access[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>id] &lt;-<span class="st"> </span>road_access</a>
+<a class="sourceLine" id="cb9-20" title="20">  data<span class="op">$</span>urgent_care[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>id] &lt;-<span class="st"> </span>urgent_care</a>
+<a class="sourceLine" id="cb9-21" title="21">}</a></code></pre></div>
+</div>
+</div>
+<div id="defining-outcomes" class="section level2">
+<h2><span class="header-section-number">2.4</span> Defining Outcomes</h2>
+<p>So, we have established the annual data, but, because we are looking at projecting into the future, we need to pair observations with future outcomes. Essentially, we will pair each observation with the synthetic opioid death rates corresponding to one year, two years, and three years into the future. This is of interest because mortality data isn’t typically available in time to make next year predictions. We can use these to show the importance of releasing data swiftly.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co">## for now we are focusing on synthetic opioids</span></a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="co">## we will create two variables, next year and in two years</span></a>
+<a class="sourceLine" id="cb10-3" title="3"></a>
+<a class="sourceLine" id="cb10-4" title="4">data<span class="op">$</span>next_year_synthetic_opioid_death_rate &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb10-5" title="5">data<span class="op">$</span>two_year_out_synthetic_opioid_death_rate &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb10-6" title="6"></a>
+<a class="sourceLine" id="cb10-7" title="7"><span class="cf">for</span>(fips <span class="cf">in</span> <span class="kw">unique</span>(data<span class="op">$</span>county_code)){</a>
+<a class="sourceLine" id="cb10-8" title="8">  </a>
+<a class="sourceLine" id="cb10-9" title="9">  <span class="cf">for</span>(year <span class="cf">in</span> <span class="dv">2010</span><span class="op">:</span><span class="dv">2016</span>){</a>
+<a class="sourceLine" id="cb10-10" title="10">    </a>
+<a class="sourceLine" id="cb10-11" title="11">    next_year &lt;-<span class="st"> </span>data<span class="op">$</span>synthetic_opioid_crude_death_rate[data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year <span class="op">+</span><span class="st"> </span><span class="dv">1</span> <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>fips]</a>
+<a class="sourceLine" id="cb10-12" title="12">    <span class="cf">if</span>(<span class="kw">length</span>(next_year) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb10-13" title="13">      data<span class="op">$</span>next_year_synthetic_opioid_death_rate[data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>fips] &lt;-<span class="st"> </span>next_year</a>
+<a class="sourceLine" id="cb10-14" title="14">    }</a>
+<a class="sourceLine" id="cb10-15" title="15">    <span class="cf">if</span>(year <span class="op">&lt;</span><span class="st"> </span><span class="dv">2016</span>){</a>
+<a class="sourceLine" id="cb10-16" title="16">      second_year &lt;-<span class="st"> </span>data<span class="op">$</span>synthetic_opioid_crude_death_rate[data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year <span class="op">+</span><span class="st"> </span><span class="dv">2</span> <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>fips]</a>
+<a class="sourceLine" id="cb10-17" title="17">      <span class="cf">if</span>(<span class="kw">length</span>(second_year) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb10-18" title="18">      data<span class="op">$</span>two_year_out_synthetic_opioid_death_rate[data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>fips] &lt;-<span class="st"> </span>second_year</a>
+<a class="sourceLine" id="cb10-19" title="19">      }</a>
+<a class="sourceLine" id="cb10-20" title="20">    }</a>
+<a class="sourceLine" id="cb10-21" title="21">  }</a>
+<a class="sourceLine" id="cb10-22" title="22">}</a></code></pre></div>
+</div>
+<div id="neighboring-county-variables-including-gravity" class="section level2">
+<h2><span class="header-section-number">2.5</span> Neighboring County Variables (including Gravity)</h2>
+<p>Of interest is considering how the presence of overdose in neighboring counties impacts overdose in a given county. A gravity approach is considered appropriate so here we will create gravity metrics for each of the four classes of overdose we have defined in our dataset (synthetic opioids, heroin, meth, cocaine). We multiply the overdose rates of two counties and divide by the distance to get the gravity between two counties. Each county’s gravity metric is the sum of all gravity scores.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">setdiff</span>(<span class="kw">ls</span>(), <span class="st">&quot;data&quot;</span>))</a>
+<a class="sourceLine" id="cb11-2" title="2">distances &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Data/County_Distances.csv&quot;</span>, <span class="dt">header =</span> T)</a>
+<a class="sourceLine" id="cb11-3" title="3"></a>
+<a class="sourceLine" id="cb11-4" title="4">data<span class="op">$</span>synthetic_opiod_gravity &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb11-5" title="5">data<span class="op">$</span>heroin_gravity &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb11-6" title="6">data<span class="op">$</span>cocaine_gravity &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb11-7" title="7">data<span class="op">$</span>meth_gravity &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb11-8" title="8"></a>
+<a class="sourceLine" id="cb11-9" title="9"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(data)){</a>
+<a class="sourceLine" id="cb11-10" title="10">  </a>
+<a class="sourceLine" id="cb11-11" title="11">  <span class="kw">print</span>(i)</a>
+<a class="sourceLine" id="cb11-12" title="12">  </a>
+<a class="sourceLine" id="cb11-13" title="13">  fips &lt;-<span class="st"> </span>data<span class="op">$</span>county_code[i]</a>
+<a class="sourceLine" id="cb11-14" title="14">  year &lt;-<span class="st"> </span>data<span class="op">$</span>year[i]</a>
+<a class="sourceLine" id="cb11-15" title="15">  </a>
+<a class="sourceLine" id="cb11-16" title="16">  synth_od &lt;-<span class="st"> </span>data<span class="op">$</span>synthetic_opioid_crude_death_rate[i]</a>
+<a class="sourceLine" id="cb11-17" title="17">  heroin_od &lt;-<span class="st"> </span>data<span class="op">$</span>heroin_crude_death_rate[i]</a>
+<a class="sourceLine" id="cb11-18" title="18">  cocaine_od &lt;-<span class="st"> </span>data<span class="op">$</span>cocaine_crude_death_rate[i]</a>
+<a class="sourceLine" id="cb11-19" title="19">  meth_od &lt;-<span class="st"> </span>data<span class="op">$</span>meth_crude_death_rate[i]</a>
+<a class="sourceLine" id="cb11-20" title="20">  </a>
+<a class="sourceLine" id="cb11-21" title="21">  dist &lt;-<span class="st"> </span>distances[distances<span class="op">$</span>county1 <span class="op">==</span><span class="st"> </span>fips <span class="op">&amp;</span><span class="st"> </span>distances<span class="op">$</span>mi_to_county <span class="op">&lt;</span><span class="st"> </span><span class="dv">200</span>,]</a>
+<a class="sourceLine" id="cb11-22" title="22">  </a>
+<a class="sourceLine" id="cb11-23" title="23">  synth_gravity &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb11-24" title="24">  heroin_gravity &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb11-25" title="25">  cocaine_gravity &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb11-26" title="26">  meth_gravity &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb11-27" title="27">  </a>
+<a class="sourceLine" id="cb11-28" title="28">  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(dist)){</a>
+<a class="sourceLine" id="cb11-29" title="29">    </a>
+<a class="sourceLine" id="cb11-30" title="30">    fips2 &lt;-<span class="st"> </span>dist<span class="op">$</span>county2[j]</a>
+<a class="sourceLine" id="cb11-31" title="31">    d &lt;-<span class="st"> </span>dist<span class="op">$</span>mi_to_county[j]</a>
+<a class="sourceLine" id="cb11-32" title="32">    </a>
+<a class="sourceLine" id="cb11-33" title="33">    synth_od2 &lt;-<span class="st"> </span>data<span class="op">$</span>synthetic_opioid_crude_death_rate[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>fips2 <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb11-34" title="34">    heroin_od2 &lt;-<span class="st"> </span>data<span class="op">$</span>heroin_crude_death_rate[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>fips2 <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb11-35" title="35">    cocaine_od2 &lt;-<span class="st"> </span>data<span class="op">$</span>cocaine_crude_death_rate[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>fips2 <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb11-36" title="36">    meth_od2 &lt;-<span class="st"> </span>data<span class="op">$</span>meth_crude_death_rate[data<span class="op">$</span>county_code <span class="op">==</span><span class="st"> </span>fips2 <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>year <span class="op">==</span><span class="st"> </span>year]</a>
+<a class="sourceLine" id="cb11-37" title="37">    </a>
+<a class="sourceLine" id="cb11-38" title="38">    <span class="cf">if</span>(<span class="kw">length</span>(synth_od2) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb11-39" title="39">      synth_gravity &lt;-<span class="st"> </span>synth_gravity <span class="op">+</span><span class="st"> </span>((synth_od<span class="op">*</span>synth_od2)<span class="op">/</span>(d<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb11-40" title="40">    }</a>
+<a class="sourceLine" id="cb11-41" title="41">    </a>
+<a class="sourceLine" id="cb11-42" title="42">    <span class="cf">if</span>(<span class="kw">length</span>(heroin_od2) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb11-43" title="43">      heroin_gravity &lt;-<span class="st"> </span>heroin_gravity <span class="op">+</span><span class="st"> </span>((heroin_od<span class="op">*</span>heroin_od2)<span class="op">/</span>(d<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb11-44" title="44">    }</a>
+<a class="sourceLine" id="cb11-45" title="45">    </a>
+<a class="sourceLine" id="cb11-46" title="46">    <span class="cf">if</span>(<span class="kw">length</span>(cocaine_od2) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb11-47" title="47">      cocaine_gravity &lt;-<span class="st"> </span>cocaine_gravity <span class="op">+</span><span class="st"> </span>((cocaine_od<span class="op">*</span>cocaine_od2)<span class="op">/</span>(d<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb11-48" title="48">    }</a>
+<a class="sourceLine" id="cb11-49" title="49">    </a>
+<a class="sourceLine" id="cb11-50" title="50">    <span class="cf">if</span>(<span class="kw">length</span>(meth_od2) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb11-51" title="51">      meth_gravity &lt;-<span class="st"> </span>meth_gravity <span class="op">+</span><span class="st"> </span>((meth_od<span class="op">*</span>meth_od2)<span class="op">/</span>(d<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb11-52" title="52">    }</a>
+<a class="sourceLine" id="cb11-53" title="53">    </a>
+<a class="sourceLine" id="cb11-54" title="54">  }</a>
+<a class="sourceLine" id="cb11-55" title="55">  </a>
+<a class="sourceLine" id="cb11-56" title="56">  </a>
+<a class="sourceLine" id="cb11-57" title="57">  data<span class="op">$</span>synthetic_opiod_gravity[i] &lt;-<span class="st"> </span>synth_gravity</a>
+<a class="sourceLine" id="cb11-58" title="58">  data<span class="op">$</span>heroin_gravity[i] &lt;-<span class="st"> </span>heroin_gravity</a>
+<a class="sourceLine" id="cb11-59" title="59">  data<span class="op">$</span>cocaine_gravity[i] &lt;-<span class="st"> </span>cocaine_gravity</a>
+<a class="sourceLine" id="cb11-60" title="60">  data<span class="op">$</span>meth_gravity[i] &lt;-<span class="st"> </span>meth_gravity</a>
+<a class="sourceLine" id="cb11-61" title="61">  </a>
+<a class="sourceLine" id="cb11-62" title="62">}</a></code></pre></div>
+</div>
+<div id="save-dataset" class="section level2">
+<h2><span class="header-section-number">2.6</span> Save Dataset</h2>
+<p>Once completed, we then want to save this dataset for future use. Creating this data (in particular, the gravity variables) is time consuming and so we do not want to have to frequently re-run this code.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">setdiff</span>(<span class="kw">ls</span>(), <span class="st">&quot;data&quot;</span>))</a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="kw">write.csv</span>(data, <span class="st">&quot;Final_Dataset.csv&quot;</span>)</a></code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Cox_Reg.pdf", "Cox_Reg.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
