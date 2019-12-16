@@ -45,7 +45,9 @@ Project goal is to identify aggressive driving from unlabeled real-world driving
 Doctoral researcher on EMERGED study. 
 
 
-## Manuscripts
+## Manuscript
+
+[Google Scholar Profile](https://scholar.google.com/citations?hl=en&user=13NE9E0AAAAJ)
 
 **Marks, C.**, Botquez, A., Jain, S., Sun, X., Strathdee, S., Garfein, R., Milloy, M-J, DeBeck, K., Cepeda, J., Werb, D., Martin, N., Opioid agonist treatment scale-up and the initiation of injection drug use: a dynamic modeling analysis. PLOS Medicine. 2019 [DOI: 10.1371/journal.pmed.1002973](https://doi.org/10.1371/journal.pmed.1002973)   
 
@@ -69,6 +71,8 @@ Magaña, V., **Marks, C.**, Zúñiga, M.L., Exploratory Study of Stigma as a Pre
 
 ### Fall 2019: TA for SW-610 Computer Applications in Social Work Practice @ SDSU
 
+### Spring 2020: Lecturer for SW-610 Computer Applications in Social Work Practice4 @ SDSU
+
 ## Presentations, Lectures, & Event Participation
 
 **June 2018** International Consortium of Universities for Drug Demand Reduction, Doctoral Student Panel
@@ -79,7 +83,7 @@ Magaña, V., **Marks, C.**, Zúñiga, M.L., Exploratory Study of Stigma as a Pre
 
 2019 - IEEE-ITSC Conference Proceeding Review
 
-2019 - IJDP Review
+2019 - IJDP Review x2
 
 
 
