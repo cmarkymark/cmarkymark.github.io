@@ -1,6 +1,6 @@
 ## Tartine
 
-This is the second bread recipe I have followed and it went reallly well.  I got the general recipe from (here)[https://www.homemadefoodjunkie.com/tartine-style-sourdough-bread-recipe/)
+This is the second bread recipe I have followed and it went reallly well.  I got the general recipe from [here](https://www.homemadefoodjunkie.com/tartine-style-sourdough-bread-recipe/)
 
 The recipe is as follows.
 
