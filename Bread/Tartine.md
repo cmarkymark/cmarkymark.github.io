@@ -2,7 +2,9 @@
 
 This is the second bread recipe I have followed and it went reallly well.  I got the general recipe from [here](https://www.homemadefoodjunkie.com/tartine-style-sourdough-bread-recipe/)
 
-[logo]: tartine.jpg
+Inline-style: 
+![alt text](tartine.jpg "Logo Title Text 1")
+
 
 The recipe is as follows.
 
