@@ -81,9 +81,7 @@ Magaña, V., **Marks, C.**, Zúñiga, M.L., Exploratory Study of Stigma as a Pre
 
 ## Peer-Review History
 
-2019 - IEEE-ITSC Conference Proceeding Review
-
-2019 - IJDP Review x2
+[Publons Profile](https://publons.com/researcher/3293322/charles-marks/peer-review/)
 
 
 
