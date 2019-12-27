@@ -81,8 +81,6 @@ Magaña, V., **Marks, C.**, Zúñiga, M.L., Exploratory Study of Stigma as a Pre
 
 ## Peer-Review History
 
-[Publons Profile](https://publons.com/researcher/3293322/charles-marks/peer-review/)
-
 <div>
   <a class="embedly-card" data-card-controls="0" href="https://publons.com/author/3293322/widget/embed/">Charles Marks' profile widget</a>
   <script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
