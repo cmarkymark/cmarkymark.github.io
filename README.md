@@ -1,12 +1,8 @@
-# My Personal Website 
+# About
 
-## (Yeah, it's a markdown file)
+Hello, my name is Charles Marks (they/them), MPH ('17).  I am currently a doctoral student in the [IRSU JDP @ SDSU-UCSD](https://chhs.sdsu.edu/irsu/).  As a part of this program, I work on research teams both at SDSU and UCSD and I am teaching within the SDSU School of Social Work.  I have a background in maths and computer science, which has put me in a decent position to become a statistican and data scientist.  I approach my work from a critical social lens, with a particular interest in the role power structures reinforce inequities and disparities.  As a primarily quantitative research, I currently hold a great interest in applying statistical techniques in alignment with this critical lens.  Of particular interest, my dissertation shall focus on the role which trauma and adversity play within the substance use life course.  
 
-Hello, my name is Charles Marks.  I am a doctoral student in the [IRSU JDP @ SDSU-UCSD](https://chhs.sdsu.edu/irsu/).  I'm trying to navigate how to be an anarchist activist and an academic at the same time.  Someone I had the pleasure of learning from told me that one cannot make changes to a broken system from the inside -- I understand this to be true.  But academia, while certainly an institution in need of greater reform, seems a bit different in the sense that researchers and often empowered to create new institutions.  
-
-Basically, here I want to host my work in a space that I have control over and where I can make my work free to access.  I do a fair bit of data analysis and I would like to be transparent in reporting my methods and results, so that will all be hosted here.
-
-I will update this, but for now, figured I'd put a placeholder in (1/21/19)
+(1/1/20)
 
 
 
