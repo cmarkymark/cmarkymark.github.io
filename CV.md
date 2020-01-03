@@ -40,9 +40,9 @@ Doctoral researcher on the PRIMER study.  Responsibilities have included data an
 
 Project goal is to identify aggressive driving from unlabeled real-world driving data.  Utilized both unsupervised and supervised machine learning techniques to classify and label large datasets and developed tools for visualizing this data.  All analyses conducted in R on top of a PostGreSQL server.
 
-### Researcher: EMERGED (2019 - Current)
+### Researcher: EMERGENS (2019 - Current)
 
-Doctoral researcher on EMERGED study. 
+Doctoral researcher on the EMERGENS, bulding statistical models aimed at predicting counties within the United States at highest risk of experiencing a synthetic opioid (ie fentanyl) outbreak.
 
 
 ## Manuscript
