@@ -6,7 +6,7 @@ I (they/them) am a doctoral student in the Interdisciplinary Research on Substan
 
 ### Oberlin College '14, BA (Mathematics & Computer Science)
 
-Studies primarily focused in theoretical computer science, with a particular focus on both graph theory and complexity theory (with a sort of haphazard forray into [Math art](http://bridgesmathart.org/2012/cdrom/exhibition.pdf).  
+Studies primarily focused in theoretical computer science, with a particular focus on both graph theory and complexity theory (with a sort of haphazard forray into [Math art](http://bridgesmathart.org/2012/cdrom/exhibition.pdf)).  
 
 ### University of Southern California '17, MPH
 
