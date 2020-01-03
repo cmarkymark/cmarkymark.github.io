@@ -24,7 +24,7 @@ Dissertation Committee Members: Dan Werb, Natasha Martin, Laramie Smith, Maria L
 
 ## Job Appointments
 
-### Toiyabe Indian Health Project: Family Services Intern
+### Toiyabe Indian Health Project: Family Services Intern (2016 - 2017)
 
 Worked in the department of Family Services doing data analysis and general program assistance.
 
