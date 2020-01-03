@@ -50,9 +50,9 @@ Doctoral researcher on the EMERGENS, bulding statistical models aimed at predict
 
 **Marks, C.**, Borquez, A., Jain, S., Sun, X., Strathdee, S., Garfein, R., Milloy, M-J, DeBeck, K., Cepeda, J., Werb, D., Martin, N., Opioid agonist treatment scale-up and the initiation of injection drug use: a dynamic modeling analysis. PLOS Medicine. 2019 [DOI: 10.1371/journal.pmed.1002973](https://doi.org/10.1371/journal.pmed.1002973)   
 
-Baxter, S., **Marks, C.**, Kuo, T., Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records. American Journal of Ophtalmology. 2019 In Press [DOI: 10.1016/j.ajo.2019.07.005](https://doi.org/10.1016/j.ajo.2019.07.005)
+Baxter, S., **Marks, C.**, Kuo, T., Ohno-Machado, L., Weinreb, R., Machine learning-based predictive modeling of surgical intervention in glaucoma using systemic data from electronic health records. American Journal of Ophtalmology. 2019 [DOI: 10.1016/j.ajo.2019.07.005](https://doi.org/10.1016/j.ajo.2019.07.005)
 
-**Marks, C.**, Zúñiga, M.L., Identifying Key Subpopulations Among HIV+ Latinos Receiving Care in San Diego-Tijuana & Assessing CAM Utilization and ARV Adherence: A Latent Class Analysis. Frontiers in Public Health [DOI: 10.3389/fpubh.2019.00179](https://doi.org/10.3389/fpubh.2019.00179)
+**Marks, C.**, Zúñiga, M.L., Identifying Key Subpopulations Among HIV+ Latinos Receiving Care in San Diego-Tijuana & Assessing CAM Utilization and ARV Adherence: A Latent Class Analysis. Frontiers in Public Health. 2019 DOI: 10.3389/fpubh.2019.00179](https://doi.org/10.3389/fpubh.2019.00179)
 
 ## Conference Procedings
 
@@ -70,7 +70,7 @@ Magaña, V., **Marks, C.**, Zúñiga, M.L., Exploratory Study of Stigma as a Pre
 
 ### Fall 2019: TA for SW-610 Computer Applications in Social Work Practice @ SDSU
 
-### Spring 2020: Lecturer for SW-610 Computer Applications in Social Work Practice4 @ SDSU
+### Spring 2020: Lecturer for SW-610 Computer Applications in Social Work Practice @ SDSU
 
 ## Presentations, Lectures, & Event Participation
 
