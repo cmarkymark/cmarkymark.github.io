@@ -44,8 +44,7 @@ Project goal is to identify aggressive driving from unlabeled real-world driving
 
 Doctoral researcher on the EMERGENS, bulding statistical models aimed at predicting counties within the United States at highest risk of experiencing a synthetic opioid (ie fentanyl) outbreak.
 
-
-## Manuscript
+## Peer-Reviewed Publications
 
 [Google Scholar Profile](https://scholar.google.com/citations?hl=en&user=13NE9E0AAAAJ)
 
