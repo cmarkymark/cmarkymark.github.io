@@ -30,7 +30,7 @@ Worked in the department of Family Services doing data analysis and general prog
 
 ### Graduate Assistant: SDSU School of Social Work (2017 - Current)
 
-Primary responsibility as teaching assistant in the fall of 2019 and instructor of record in the Spring of 2020.  Course TBD.
+Primary responsibility as teaching assistant in the fall of 2019 and instructor of record in the Spring of 2020.  The course is Computer Applications in Social Work, a masters level course for social works students to learn statistical methods and the prepartion of original research using secondary data.
 
 ### Researcher: [PRIMER](https://primerstudy.com/our-team/) (2017 - Current)
 
