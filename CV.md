@@ -54,7 +54,23 @@ Baxter, S., **Marks, C.**, Kuo, T., Ohno-Machado, L., Weinreb, R., Machine learn
 
 **Marks, C.**, Zúñiga, M.L., Identifying Key Subpopulations Among HIV+ Latinos Receiving Care in San Diego-Tijuana & Assessing CAM Utilization and ARV Adherence: A Latent Class Analysis. Frontiers in Public Health. 2019 DOI: 10.3389/fpubh.2019.00179](https://doi.org/10.3389/fpubh.2019.00179)
 
+## Papers In Production and Under Review
+
+Cummins, K., **Marks, C.**, Writing Results Without Significance Testing: Adopting a NeoFisherian Evaluation Framework.  Under Review (Submitted 1/7/20) at Frontiers in Psychology: Quantitative Psychology and Measurement Special Issue on New Developments in Statistical Methods and Psychometric Tools
+
+Gicquelais, R., Werb, D., **Marks, C.**, Ziegler, C., Mehta, S., Genberg, B., Schiem, A., A Systematic Review of Prevalence and Correlates of Providing and Receiving Assistance with the Transition to Injecting Drugs. For Submission to Epidemiologic Reviews (by 1/31/20)
+
+**Marks, C.**, Meyers, S., Cummins, K., ... , Werb, D. The Involvement of People Who Inject Drugs in Injection Initiation Events: Identifying Commonality and Heterogeneity Across Three North American Settings.  To be submitted January 2020.
+
+**Marks, C.**, Machiani, S., Jahangiri, A., Identifying and Labelling Risk Driving: A Multi-Stage Process Using Real World Driving Data, For Submission to IEEE Transactions on Initelligents Transportation Systems, January 2020
+
+Espinosa, S., Fondevila, G, **Marks, C.**, Exploiring the Motivations for Non-Compliance Behaviors among Young Cannabis Users in Mexico, Under Production for Submission in the Spring of 2020
+
 ## Conference Procedings
+
+Gicquelais, R., Werb, D., **Marks, C.**, Ziegler, C., Mehta, S., Genberg, B., Schiem, A., A Systematic Review of Prevalence and Correlates of Providing and Receiving Assistance with the Transition to Injecting Drugs. For Submission to The International Society for the Study of Drug Policy Conference 2020 in Aguascalientes, Mexico
+
+Meyers, S., Jain, S., Sun, X., **Marks, C.**, Milloy, MJ, DeBeck, K., Hayashi, K., Strathdee, S., Werb, D., Gender and time to the provision of injection initiation assistance among people who inject drugs across two distinct North American contexts: Tijuana, Mexico and Vancouver, Canada. For Submission to 2020 NIDA International Forum in Hollywood, Florida
 
 **Marks C.**, Jahangiri, A.,Machiani, S.G.,Iterative DBSCAN (I-DBSCAN) to Identify Aggressive Driving Behaviors within Unlabeled Real-World Driving Data IEEE ITSC 2019, New Zealand 
 
