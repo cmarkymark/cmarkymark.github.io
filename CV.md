@@ -72,6 +72,8 @@ Gicquelais, R., Werb, D., **Marks, C.**, Ziegler, C., Mehta, S., Genberg, B., Sc
 
 Meyers, S., Jain, S., Sun, X., **Marks, C.**, Milloy, MJ, DeBeck, K., Hayashi, K., Strathdee, S., Werb, D., Gender and time to the provision of injection initiation assistance among people who inject drugs across two distinct North American contexts: Tijuana, Mexico and Vancouver, Canada. For Submission to 2020 NIDA International Forum in Hollywood, Florida
 
+**Marks, C.**, Abramovitz, D., Donnelly, C., Ciccarone, D., Martin, N., Strathdee, S., Borquez, A., Predicting Counties At-Risk of a Synthetic Opioid Overdose Outbreak: A Statistical Modeling Approach.  Submitted to The College on Problems of Drug Dependence Annuall Scientific Meeting 2020 in Hollywood, Florida
+
 **Marks C.**, Jahangiri, A.,Machiani, S.G.,Iterative DBSCAN (I-DBSCAN) to Identify Aggressive Driving Behaviors within Unlabeled Real-World Driving Data IEEE ITSC 2019, New Zealand 
 
 Magaña, V., **Marks, C.**, Baweja, H., Zúñiga, M.L. Cannabis Use and Adherence to Antiretrovirals Among HIV+ Latinos on the U.S.-Mexico Border. APHA Annual Meeting 2019, Philadelphia, PA, USA
