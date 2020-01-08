@@ -68,6 +68,8 @@ Espinosa, S., Fondevila, G, **Marks, C.**, Exploiring the Motivations for Non-Co
 
 ## Conference Procedings
 
+**Marks, C**, Johnson, D., Carrasco, G., Carrasco-Hernandez, R., Ciccarone, D., Strathdee, S., Smith, D., Borquez, A., Methodological approaches for the prediction or early detection of drug-use associated public-health outbreaks in the United States: a narrative review. For Submission to The International Society for the Study of Drug Policy Conference 2020 in Aguascalientes, Mexico
+
 Gicquelais, R., Werb, D., **Marks, C.**, Ziegler, C., Mehta, S., Genberg, B., Schiem, A., A Systematic Review of Prevalence and Correlates of Providing and Receiving Assistance with the Transition to Injecting Drugs. For Submission to The International Society for the Study of Drug Policy Conference 2020 in Aguascalientes, Mexico
 
 Meyers, S., Jain, S., Sun, X., **Marks, C.**, Milloy, MJ, DeBeck, K., Hayashi, K., Strathdee, S., Werb, D., Gender and time to the provision of injection initiation assistance among people who inject drugs across two distinct North American contexts: Tijuana, Mexico and Vancouver, Canada. For Submission to 2020 NIDA International Forum in Hollywood, Florida
