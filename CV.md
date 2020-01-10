@@ -66,6 +66,8 @@ Gicquelais, R., Werb, D., **Marks, C.**, Ziegler, C., Mehta, S., Genberg, B., Sc
 
 Espinosa, S., Fondevila, G, **Marks, C.**, Exploiring the Motivations for Non-Compliance Behaviors among Young Cannabis Users in Mexico, Under Production for Submission in the Spring of 2020
 
+**Marks, C**, Johnson, D., Carrasco, G., Carrasco-Hernandez, R., Ciccarone, D., Strathdee, S., Smith, D., Borquez, A., A Call Cross-Disciplinary Call to Action: Early Detection of Drug-Use Associated Public-Health Outbreaks in the United States. For Submission to The International Society for the Study of Drug Policy Conference 2020 in Aguascalientes, Mexico
+
 ## Conference Procedings
 
 **Marks, C**, Johnson, D., Carrasco, G., Carrasco-Hernandez, R., Ciccarone, D., Strathdee, S., Smith, D., Borquez, A., Methodological approaches for the prediction or early detection of drug-use associated public-health outbreaks in the United States: a narrative review. For Submission to The International Society for the Study of Drug Policy Conference 2020 in Aguascalientes, Mexico
