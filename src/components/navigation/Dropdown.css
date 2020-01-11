@@ -1,0 +1,22 @@
+.navItem {
+  display: inline-block;
+  position: relative;
+  margin: 1vw
+}
+
+.dropContainer {
+  display: block;
+  position: absolute;
+}
+
+.navLinks {
+  display: block;
+  position: relative;
+  background-color: white;
+  z-index: 1;
+  padding: 1vw;
+}
+
+h5 {
+  margin: 0;
+}

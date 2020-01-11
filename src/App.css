@@ -1,0 +1,9 @@
+.App {
+  text-align: center;
+  height:100vh;
+}
+
+#content {
+  margin-top: 6vw;
+  margin-bottom: 6vw;
+}
